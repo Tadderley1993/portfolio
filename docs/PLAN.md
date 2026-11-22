@@ -214,21 +214,25 @@ scripts/          encode-media.sh
 
 ## 9. Build phases
 
-1. **Setup + assets** — scaffold, encode media (audio stripped), logo SVG, design tokens.
-2. **Intro → Home → zoom transition** (desktop), seamless loops.
-3. **Studio scene** — hotspot mapping, notebook glow, lamp toggle, monitor zoom in/out.
-4. **Desktop OS** — window manager, folders, doc viewer, browser app, placeholder content.
-5. **Notebook form + Supabase + `/admin`.**
-6. **Tablet + mobile adaptations** — blurred-backdrop layout, tool tray, Phone OS.
-7. **Polish + deploy** — performance, accessibility, SEO `/work` page, meta/OG image.
+1. ✅ **Setup + assets** — scaffold, encode media (audio stripped), logo SVG, design tokens.
+2. ✅ **Intro → Home → zoom transition** (desktop), seamless loops.
+3. ✅ **Studio scene** — hotspot mapping, notebook glow, lamp toggle, monitor zoom in/out.
+4. ✅ **Desktop OS** — window manager, folders, doc viewer, browser app, placeholder content.
+5. ✅ **Notebook form + Supabase + `/admin`** — live and tested end to end.
+6. ✅ **Tablet + mobile adaptations** — blurred-backdrop layout, tool tray, Phone OS.
+7. 🟡 **Polish + deploy** — deployed to Vercel. Still to do: performance (bundle split),
+   accessibility pass, SEO `/work` page, OG image. See `docs/CHECKLIST.md`.
+
+## Decisions
+
+- **Logo:** sans-serif "d>", matching the building sign (`public/brand/logo.svg`). The original
+  serif mark is kept at `media-src/logo-serif-original.ai`.
+- **Backend:** Supabase, project "portfolio" (`vexitoxnqxwmhqzabykm`).
+- **Hosting:** Vercel, project "portfolio", production branch `main`.
+- **Admin email:** `terrenceadderley@designsbyta.com`.
 
 ## Open questions
 
-- ~~Logo~~ — decided: sans-serif, matching the building sign (`public/brand/logo.svg`).
-  sans-serif "d>". Which direction do you want — keep the serif, redesign to match the sign,
-  or something new? (Because the camera is static, the real logo can also be overlaid onto
-  the sign plate in the video so they always match.)
-- **Supabase** project URL + anon key (or a different backend preference).
-- **Hosting:** Vercel or Netlify?
-- **Admin email** for the login allowlist (stored as config, not committed publicly if
-  you'd rather not).
+- **Custom domain:** e.g. designsbyta.com? (Then update Supabase Site URL + redirect URL.)
+- **Real content:** which projects, write-ups and screenshots replace the placeholders?
+- **Email alerts** on new submissions: wanted? (Needs a Resend account + API key.)
