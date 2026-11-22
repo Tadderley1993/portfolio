@@ -4,8 +4,11 @@ import { useViewport } from './lib/device'
 import { useExperience } from './store'
 import { Intro } from './scenes/Intro'
 import { Exterior } from './scenes/Exterior'
-import { Studio } from './scenes/Studio'
 
+// The studio (desk, desktop OS, notebook form) is its own chunk so the first load only carries the
+// intro + exterior. It's prefetched while the exterior is on screen, so entering is still instant.
+const loadStudio = () => import('./scenes/Studio')
+const Studio = lazy(() => loadStudio().then((m) => ({ default: m.Studio })))
 const Admin = lazy(() => import('./admin/Admin').then((m) => ({ default: m.Admin })))
 
 const INTRO_KEY = 'd-studio:intro-seen'
@@ -44,12 +47,21 @@ function Experience() {
     return () => link.remove()
   }, [vp.device])
 
+  // Fetch the studio code in the background once the first screen has had a moment to load.
+  useEffect(() => {
+    const t = window.setTimeout(() => void loadStudio(), 1200)
+    return () => window.clearTimeout(t)
+  }, [])
+
   const intro = scene === 'intro'
   return (
     <>
       {/* The exterior renders underneath the intro so its video buffers meanwhile */}
       {scene === 'studio' ? (
-        <Studio key="studio" vp={vp} onExit={() => navigate('/')} />
+        // Black matches the end of the zoom-to-window transition, so a slow load just holds on black.
+        <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: '#000' }} />}>
+          <Studio key="studio" vp={vp} onExit={() => navigate('/')} />
+        </Suspense>
       ) : (
         <Exterior key="exterior" vp={vp} active={!intro} onEnter={() => navigate('/studio')} />
       )}

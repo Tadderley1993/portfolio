@@ -30,7 +30,7 @@ Placeholder content lives in `src/content/` — `projects.ts` (browser), `docs.t
 
 Project **portfolio** (ref `vexitoxnqxwmhqzabykm`, us-west-2). Already set up:
 
-- `supabase/migrations/` — both migrations are applied to the live project. Add new changes as new
+- `supabase/migrations/` — all migrations are applied to the live project. Add new changes as new
   migration files; don't edit applied ones.
 - Tables: `consultations` (form submissions) and `admins` (who may use `/admin`).
 - Access rules: visitors can only insert into `consultations`; admins can read, update and delete.

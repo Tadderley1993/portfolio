@@ -1,4 +1,5 @@
-import { supabase } from './supabase'
+// The Supabase client is loaded on demand (see submitConsultation) so it stays out of the
+// first-load bundle; only visitors who actually send the form download it.
 
 export const PROJECT_TYPES = ['New website', 'Website redesign', 'Web app', 'E-commerce', 'Branding', 'Something else'] as const
 export const BUDGETS = ['Under $5k', '$5k – $15k', '$15k – $40k', '$40k+', 'Not sure yet'] as const
@@ -34,6 +35,7 @@ export class BackendNotConfigured extends Error {
 }
 
 export async function submitConsultation(input: ConsultationInput, source: string) {
+  const { supabase } = await import('./supabase')
   if (!supabase) throw new BackendNotConfigured()
   const { error } = await supabase.from('consultations').insert({
     ...input,

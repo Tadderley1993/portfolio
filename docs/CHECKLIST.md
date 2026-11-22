@@ -8,18 +8,14 @@
 The site is launched and working end to end: the form saves to Supabase, the admin inbox shows
 submissions, and pushes to `main` deploy automatically. Next up, in suggested order:
 
-1. **Private-window check:** open the live URL logged out of Vercel and confirm no Vercel login
-   screen appears. If one does, turn off Vercel Authentication for production
-   (Vercel → portfolio → Settings → Deployment Protection).
-2. **Real content:** replace the placeholders in `src/content/`:
+1. **Real content:** replace the placeholders in `src/content/`:
    - `projects.ts`: Concept Work and Client Work projects (browser app)
    - `docs.ts`: Mission Statement, About the Studio, the three Services docs
    - `fs.ts`: desktop folders and icons
    - Project screenshots go in `public/` (e.g. `public/work/<project>/`)
-3. **Faster first load:** split the ~600 KB JS bundle (lazy-load the desktop OS and admin).
-4. **Custom domain** (optional): add it in Vercel, then update Supabase → Authentication →
+2. **Custom domain** (optional): add it in Vercel, then update Supabase → Authentication →
    URL Configuration (Site URL + `/admin` redirect URL).
-5. **Email alerts** (optional): Supabase Edge Function + Resend; needs a Resend API key.
+3. **Email alerts** (optional): Supabase Edge Function + Resend; needs a Resend API key.
 
 ## Working setup (for reference)
 
@@ -28,7 +24,7 @@ submissions, and pushes to `main` deploy automatically. Next up, in suggested or
 | Code | GitHub `tadderley1993/portfolio`, branch `main` (production) |
 | Hosting | Vercel project `portfolio`, push to `main` = live deploy, other branches = preview |
 | Database | Supabase project `portfolio` (ref `vexitoxnqxwmhqzabykm`) |
-| Schema | `supabase/migrations/` (both applied; add new files for changes) |
+| Schema | `supabase/migrations/` (all applied; add new files for changes) |
 | Admin | `terrenceadderley@designsbyta.com` (Supabase Auth user + `public.admins`) |
 | Local env | `.env.local` (gitignored); copy from `.env.example` |
 
@@ -42,11 +38,13 @@ submissions, and pushes to `main` deploy automatically. Next up, in suggested or
 - [x] Admin user created, Supabase Site URL + `/admin` redirect URL set
 - [x] Admin login works on the live site
 - [x] Real submission through the live notebook form shows up in `/admin`
+- [x] Faster first load: studio and Supabase load on demand (first JS 602 KB → 342 KB, 182 → 114 KB gzipped)
+- [x] Supabase advisor: `rls_auto_enable()` no longer callable by visitors (auto-RLS trigger still works)
+- [x] Vercel login protection limited to preview links, so the live site is public
 
 ## To do
 
 ### Launch follow-ups
-- [ ] Open the live URL in a private window to confirm it loads without a Vercel login
 - [ ] Optional: connect a custom domain (e.g. designsbyta.com) and update the Supabase URLs to match
 
 ### Content
@@ -54,11 +52,10 @@ submissions, and pushes to `main` deploy automatically. Next up, in suggested or
 - [ ] Add real project screenshots / recordings for the browser app
 
 ### Fixes
-- [ ] Supabase advisor: `rls_auto_enable()` is callable by anyone. It came with the project, not this
-  site; review or revoke
+- [ ] Optional: Supabase → Authentication → turn on Leaked Password Protection (advisor warning; may
+  need a paid plan). Low priority: admin sign-in uses email links, not passwords
 
 ### Polish
-- [ ] Split the 600 KB JavaScript bundle (lazy-load the desktop OS)
 - [ ] Lighthouse ≥ 90, keyboard pass, reduced-motion check
 - [ ] `/work` SEO page + social share image
 
