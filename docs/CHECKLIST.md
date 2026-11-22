@@ -24,8 +24,8 @@
 ## Launch follow-ups
 - [ ] Open the live URL in a private window to confirm it loads without a Vercel login
 - [x] Create `main` from `claude/affectionate-noether-ya3rgw`
-- [ ] GitHub → Settings → General → Default branch → `main`
-- [ ] Vercel → portfolio → Settings → Environments → Production → Branch Tracking → `main`
+- [x] GitHub → Settings → General → Default branch → `main`
+- [x] Vercel → portfolio → Settings → Environments → Production → Branch Tracking → `main`
 - [ ] Optional: connect a custom domain (e.g. designsbyta.com) and update the Supabase URLs to match
 
 ## Fixes
