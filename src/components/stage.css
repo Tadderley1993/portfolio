@@ -1,0 +1,70 @@
+.stage-root {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--black);
+}
+
+.stage-backdrop {
+  position: absolute;
+  inset: -40px;
+}
+.stage-backdrop-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: blur(28px) saturate(1.1) brightness(0.55);
+  transform: scale(1.1);
+}
+
+.stage-camera {
+  position: absolute;
+  inset: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+.stage {
+  position: absolute;
+}
+
+.stage-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Soft feathered edges when the stage is letterboxed over the blurred backdrop */
+.stage-root .stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  box-shadow: inset 0 0 60px 20px rgba(7, 8, 10, 0.35);
+}
+
+.stage-overlay-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+.fade-black {
+  position: fixed;
+  inset: 0;
+  background: var(--black);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 50;
+}

@@ -1,0 +1,274 @@
+.admin {
+  min-height: 100%;
+  background: #0c0e12;
+  color: var(--paper);
+  display: flex;
+  flex-direction: column;
+}
+.admin code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+  padding: 1px 5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.08);
+}
+.admin-top {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.admin-logo {
+  width: 30px;
+}
+.admin-name {
+  font-weight: 600;
+}
+.admin-spacer {
+  flex: 1;
+}
+.admin-user {
+  font-size: 13px;
+  color: var(--paper-dim);
+}
+.admin-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.08);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.admin-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+.admin-btn.is-primary {
+  background: var(--paper);
+  color: var(--ink);
+}
+.admin-muted {
+  color: var(--paper-faint);
+}
+.admin-ok {
+  color: var(--ok);
+}
+.admin-err {
+  color: var(--danger);
+}
+
+.admin-notice,
+.admin-login {
+  max-width: 420px;
+  margin: 12vh auto;
+  padding: 0 20px;
+}
+.admin-notice h1,
+.admin-login h1 {
+  font-size: 26px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+.admin-login {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.admin-login p {
+  margin: 0;
+  color: var(--paper-dim);
+}
+.admin input,
+.admin select,
+.admin textarea {
+  font: inherit;
+  font-size: 14px;
+  color: var(--paper);
+  background: #161a21;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 9px 12px;
+}
+
+.admin-body {
+  flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 420px;
+  min-height: 0;
+}
+.admin-list {
+  border-right: 1px solid var(--line);
+  min-width: 0;
+}
+.admin-toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px;
+  position: sticky;
+  top: 0;
+  background: #0c0e12;
+  border-bottom: 1px solid var(--line);
+}
+.admin-toolbar input {
+  flex: 1;
+  min-width: 0;
+}
+.admin-list > .admin-muted,
+.admin-list > .admin-err {
+  padding: 20px;
+}
+.admin-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.admin-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 90px minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: start;
+  padding: 14px 20px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+.admin-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+.admin-row.is-selected {
+  background: rgba(255, 255, 255, 0.06);
+}
+.admin-row-main {
+  min-width: 0;
+  font-size: 14px;
+}
+.admin-row-msg {
+  display: block;
+  margin-top: 3px;
+  color: var(--paper-dim);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.admin-row-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+  font-size: 12px;
+  color: var(--paper-faint);
+}
+
+.admin-status {
+  display: inline-block;
+  font: 500 10px/1 var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 5px 7px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  text-align: center;
+}
+.s-new {
+  background: rgba(124, 196, 255, 0.18);
+  color: var(--accent);
+}
+.s-contacted {
+  background: rgba(255, 201, 133, 0.18);
+  color: var(--warm);
+}
+.s-booked {
+  background: rgba(143, 220, 162, 0.18);
+  color: var(--ok);
+}
+.s-closed,
+.s-archived {
+  color: var(--paper-faint);
+}
+
+.admin-detail {
+  padding: 20px;
+  overflow: auto;
+}
+.admin-card h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.admin-card h3 {
+  margin: 20px 0 8px;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--paper-faint);
+}
+.admin-status-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.admin-status-picker .admin-status {
+  opacity: 0.45;
+  cursor: pointer;
+}
+.admin-status-picker .admin-status.is-on {
+  opacity: 1;
+  outline: 1px solid currentColor;
+}
+.admin-card dl {
+  margin: 18px 0 0;
+  display: grid;
+  gap: 8px;
+}
+.admin-card dl div {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  font-size: 14px;
+}
+.admin-card dt {
+  color: var(--paper-faint);
+}
+.admin-card dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.admin-message {
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+.admin-card textarea {
+  width: 100%;
+  resize: vertical;
+  margin-bottom: 14px;
+}
+
+@media (max-width: 860px) {
+  .admin-body {
+    grid-template-columns: 1fr;
+  }
+  .admin-list {
+    border-right: 0;
+  }
+  .admin-detail {
+    border-top: 1px solid var(--line);
+  }
+  .admin-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  .admin-row-meta {
+    flex-direction: row;
+    gap: 10px;
+  }
+  .admin-toolbar {
+    flex-wrap: wrap;
+  }
+}

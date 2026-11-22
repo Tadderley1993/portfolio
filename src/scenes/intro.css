@@ -1,0 +1,113 @@
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--black);
+  color: var(--paper);
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 28px;
+}
+
+.intro-slot {
+  width: clamp(88px, 14vmin, 140px);
+  height: clamp(88px, 14vmin, 140px);
+  display: grid;
+  place-items: center;
+}
+
+.intro-glyph {
+  width: 70%;
+  height: 70%;
+  animation: glyph-in 120ms ease-out both;
+}
+
+@keyframes glyph-in {
+  from {
+    opacity: 0.2;
+    transform: scale(0.86);
+    filter: blur(3px);
+  }
+}
+
+.intro-logo {
+  width: 150%;
+  overflow: visible;
+}
+
+.intro-logo .logo-bowl,
+.intro-logo .logo-stem,
+.intro-logo .logo-chevron {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw 700ms cubic-bezier(0.65, 0, 0.35, 1) forwards;
+}
+.intro-logo .logo-stem {
+  animation-delay: 120ms;
+}
+.intro-logo .logo-chevron {
+  animation-delay: 260ms;
+}
+.intro-logo {
+  animation: logo-settle 1200ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes logo-settle {
+  from {
+    transform: scale(0.82);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+.intro-caption {
+  margin: 0;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  min-height: 1em;
+}
+.intro-caption.is-landed {
+  animation: fade-up 700ms 450ms both;
+}
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+.intro-skip {
+  position: absolute;
+  right: max(20px, env(safe-area-inset-right));
+  bottom: max(20px, env(safe-area-inset-bottom));
+  font: 500 12px/1 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--paper-dim);
+  padding: 10px 12px;
+}
+.intro-skip:hover,
+.intro-skip:focus-visible {
+  color: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro-logo .logo-bowl,
+  .intro-logo .logo-stem,
+  .intro-logo .logo-chevron {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+  .intro-logo {
+    animation: none;
+  }
+}

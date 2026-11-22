@@ -1,0 +1,79 @@
+import { useState } from 'react'
+import { FS, DESKTOP_ITEMS, type FsItem } from '../content/fs'
+import { FsIcon } from './icons'
+import { OsContext } from './context'
+import { useWm, type AppSpec } from './wm'
+import { renderApp } from './Desktop'
+import { Logo } from '../components/Logo'
+import './os.css'
+
+interface PhoneOSProps {
+  onBook: () => void
+  onExit: () => void
+}
+
+/** Mobile take on the desktop: an app grid, and apps open full-screen with a back button. */
+export function PhoneOS({ onBook, onExit }: PhoneOSProps) {
+  const [stack, setStack] = useState<{ app: AppSpec; title: string }[]>([])
+  const { browse } = useWm()
+
+  const push = (app: AppSpec, title: string) => setStack((s) => [...s, { app, title }])
+
+  const openItem = (item: FsItem) => {
+    switch (item.kind) {
+      case 'folder':
+        return push({ type: 'finder', folderId: item.id }, item.name)
+      case 'doc':
+        return push({ type: 'doc', docId: item.docId }, item.name)
+      case 'project':
+        browse(item.projectId)
+        return push({ type: 'browser' }, item.name)
+      case 'app':
+        if (item.app === 'notebook') return onBook()
+        return push({ type: item.app }, item.name)
+    }
+  }
+
+  const top = stack[stack.length - 1]
+
+  return (
+    <OsContext.Provider value={{ openItem, onBook, onExit, compact: true, touch: true }}>
+      <div className="phone-os">
+        <header className="phone-bar">
+          {top ? (
+            <button className="phone-back" onClick={() => setStack((s) => s.slice(0, -1))}>
+              <svg viewBox="0 0 16 16"><path d="M10 3 5 8l5 5" /></svg>
+              Back
+            </button>
+          ) : (
+            <span className="phone-brand">
+              <Logo strokeWidth={18} /> Studio
+            </span>
+          )}
+          <span className="phone-title">{top?.title ?? ''}</span>
+          <button className="phone-close" onClick={onExit} aria-label="Leave the computer">
+            <svg viewBox="0 0 12 12"><path d="m3 3 6 6M9 3 3 9" /></svg>
+          </button>
+        </header>
+
+        {top ? (
+          <div className="phone-app">{renderApp(top.app)}</div>
+        ) : (
+          <ul className="phone-grid" role="list">
+            {DESKTOP_ITEMS.map((id) => {
+              const item = FS.get(id)!
+              return (
+                <li key={id}>
+                  <button className="phone-icon" onClick={() => openItem(item)}>
+                    <FsIcon item={item} size={54} />
+                    <span>{item.name.replace('.docx', '')}</span>
+                  </button>
+                </li>
+              )
+            })}
+          </ul>
+        )}
+      </div>
+    </OsContext.Provider>
+  )
+}

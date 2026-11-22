@@ -1,0 +1,252 @@
+/* ───── monitor preview (the custom desktop shown on the screen) ───── */
+.monitor-preview {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 0.4%/1.2%;
+  /* sit the UI "in" the panel: slightly dimmer and softer than a real screenshot */
+  filter: brightness(0.86) saturate(0.95) contrast(0.96);
+}
+.monitor-preview-inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+}
+.monitor-glare {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 30%, transparent 45%),
+    radial-gradient(120% 140% at 50% 50%, transparent 60%, rgba(0, 0, 0, 0.35) 100%);
+}
+
+/* ───── lamp ───── */
+.lamp-light {
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 500ms ease;
+}
+.studio.lamp-on .lamp-light {
+  opacity: 1;
+  animation: lamp-flicker 420ms steps(1) 1;
+}
+@keyframes lamp-flicker {
+  0% {
+    opacity: 0.6;
+  }
+  15% {
+    opacity: 0.1;
+  }
+  30% {
+    opacity: 0.85;
+  }
+  45% {
+    opacity: 0.35;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+
+/* ───── hotspots ───── */
+.hotspots .hotspot {
+  cursor: pointer;
+  outline: none;
+}
+.hs-hit {
+  fill: transparent;
+  pointer-events: all;
+}
+.hs-glow {
+  fill: rgba(255, 201, 133, 0.42);
+  stroke: rgba(255, 214, 160, 0.95);
+  stroke-width: 10;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.hs-edge {
+  fill: rgba(255, 236, 205, 0.06);
+  stroke: rgba(255, 236, 205, 0.85);
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+.hotspot.is-hover .hs-glow {
+  opacity: 1;
+}
+.hotspot.is-hover .hs-edge {
+  opacity: 1;
+}
+/* the notebook breathes gently to invite interaction */
+.hotspot-notebook .hs-glow {
+  animation: nb-breathe 3.2s ease-in-out infinite;
+}
+.hotspot-notebook.is-hover .hs-glow {
+  animation: none;
+}
+@keyframes nb-breathe {
+  0%,
+  100% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+/* the monitor glow is a subtle screen-light bloom instead of a hard outline */
+.hotspot-monitor .hs-glow {
+  fill: rgba(150, 200, 255, 0.12);
+  stroke: rgba(170, 210, 255, 0.5);
+}
+.hotspot-monitor .hs-edge {
+  stroke: rgba(200, 225, 255, 0.7);
+  fill: transparent;
+}
+
+.hs-label {
+  position: absolute;
+  transform: translate(-50%, -100%);
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.hs-text {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--paper);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 200ms,
+    transform 300ms var(--ease-out);
+}
+.hs-label.is-visible .hs-text {
+  opacity: 1;
+  transform: none;
+}
+
+/* Touch: always-visible pulsing markers + labels */
+.studio.is-touch .hs-text {
+  opacity: 0.92;
+  transform: none;
+  font-size: 11px;
+  padding: 5px 9px;
+}
+.hs-pulse {
+  order: 2;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--warm);
+  box-shadow: 0 0 0 0 rgba(255, 201, 133, 0.7);
+  animation: pulse 1.8s ease-out infinite;
+}
+@keyframes pulse {
+  to {
+    box-shadow: 0 0 0 16px rgba(255, 201, 133, 0);
+  }
+}
+
+/* ───── studio chrome ───── */
+.studio-ui {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  padding: max(18px, env(safe-area-inset-top)) max(20px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left));
+}
+.studio-ui > * {
+  pointer-events: auto;
+}
+.studio-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.studio-mark {
+  width: 34px;
+  color: var(--paper);
+  filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.5));
+}
+.studio-hint {
+  margin: auto auto 0;
+  font: 500 11px/1.4 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-align: center;
+  color: var(--paper-dim);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.tool-tray {
+  margin-top: auto;
+  display: grid;
+  grid-template-columns: 1fr 1.2fr 1fr;
+  gap: 8px;
+  padding: 8px;
+  border-radius: 20px;
+  background: rgba(12, 13, 17, 0.6);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+.tool-tray button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 6px;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.06);
+}
+.tool-tray button.is-primary {
+  background: var(--paper);
+  color: var(--ink);
+}
+.tool-tray button[aria-pressed='true'] {
+  background: rgba(255, 201, 133, 0.25);
+  color: var(--warm);
+}
+.tool-tray svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ───── first-person computer ───── */
+.computer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #0e1116;
+}
+
+/* Phones: the tool tray carries the labels, so keep only the pulse markers on the scene */
+@media (max-width: 767px) {
+  .studio.is-touch .hs-text {
+    display: none;
+  }
+}

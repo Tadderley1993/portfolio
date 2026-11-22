@@ -224,7 +224,7 @@ scripts/          encode-media.sh
 
 ## Open questions
 
-- **Logo:** the `.ai` file is the serif "d>". The sign in the building video shows a
+- ~~Logo~~ — decided: sans-serif, matching the building sign (`public/brand/logo.svg`).
   sans-serif "d>". Which direction do you want — keep the serif, redesign to match the sign,
   or something new? (Because the camera is static, the real logo can also be overlaid onto
   the sign plate in the video so they always match.)

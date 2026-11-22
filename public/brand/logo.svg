@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 134" fill="none" stroke="currentColor" stroke-width="14">
+  <title>d&gt;</title>
+  <circle cx="52" cy="85" r="38"/>
+  <path d="M90 6v121" stroke-linecap="butt"/>
+  <path d="M122 54l56 31-56 31" stroke-linejoin="miter" stroke-miterlimit="10"/>
+</svg>
