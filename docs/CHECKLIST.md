@@ -25,7 +25,7 @@
 - [ ] Log in at `/admin` and check the inbox loads
 
 ## Fixes
-- [ ] Notebook form: "company (optional)" field is clipped at the right edge of the page on desktop
+- [x] Notebook form: "company (optional)" field is clipped at the right edge of the page on desktop
 - [ ] Supabase advisor: `rls_auto_enable()` is callable by anyone. It came with the project, not this site; review or revoke
 
 ## Polish
