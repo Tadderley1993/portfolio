@@ -16,11 +16,8 @@
 - [ ] Submit a real test through the notebook on the live site, then delete it in `/admin`
 
 ## Admin login
-- [ ] Create your admin user in Supabase → Authentication → Users (sign-in links won't create new users)
-- [ ] Add your email to the allow-list (SQL editor):
-  ```sql
-  insert into public.admins (email) values ('you@example.com');
-  ```
+- [ ] Create your admin user in Supabase → Authentication → Users → Add user → Create new user: `terrenceadderley@designsbyta.com`, tick **Auto Confirm User** (sign-in links won't create new users)
+- [x] Add your email to the allow-list (`terrenceadderley@designsbyta.com`)
 - [ ] Supabase → Authentication → URL Configuration: set the Site URL and add `https://<your-domain>/admin` to Redirect URLs
 - [ ] Log in at `/admin` and check the inbox loads
 
