@@ -13,13 +13,13 @@
   - `VITE_SUPABASE_URL` = `https://vexitoxnqxwmhqzabykm.supabase.co`
   - `VITE_SUPABASE_ANON_KEY` = `sb_publishable_EeVum-CG96C6jMZVFzjPgw_2nOyGK_X`
 - [x] Deploy to Vercel — live at https://portfolio-chi-one-rk68jhdjtx.vercel.app
-- [ ] Submit a real test through the notebook on the live site, then delete it in `/admin`
+- [x] Submit a real test through the notebook on the live site, then delete it in `/admin`
 
 ## Admin login
-- [ ] Create your admin user in Supabase → Authentication → Users → Add user → Create new user: `terrenceadderley@designsbyta.com`, tick **Auto Confirm User** (sign-in links won't create new users)
+- [x] Create your admin user in Supabase → Authentication → Users → Add user → Create new user: `terrenceadderley@designsbyta.com`, tick **Auto Confirm User** (sign-in links won't create new users)
 - [x] Add your email to the allow-list (`terrenceadderley@designsbyta.com`)
-- [ ] Supabase → Authentication → URL Configuration: Site URL = `https://portfolio-chi-one-rk68jhdjtx.vercel.app`, Redirect URLs += `https://portfolio-chi-one-rk68jhdjtx.vercel.app/admin`
-- [ ] Log in at `/admin` and check the inbox loads
+- [x] Supabase → Authentication → URL Configuration: Site URL = `https://portfolio-chi-one-rk68jhdjtx.vercel.app`, Redirect URLs += `https://portfolio-chi-one-rk68jhdjtx.vercel.app/admin`
+- [x] Log in at `/admin` and check the inbox loads
 
 ## Launch follow-ups
 - [ ] Open the live URL in a private window to confirm it loads without a Vercel login
