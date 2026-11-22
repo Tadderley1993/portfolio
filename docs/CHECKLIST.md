@@ -9,17 +9,22 @@
 - [x] `npm run build` passes
 
 ## Launch
-- [ ] Add env vars in Vercel → Project Settings → Environment Variables
+- [x] Add env vars in Vercel → Project Settings → Environment Variables
   - `VITE_SUPABASE_URL` = `https://vexitoxnqxwmhqzabykm.supabase.co`
   - `VITE_SUPABASE_ANON_KEY` = `sb_publishable_EeVum-CG96C6jMZVFzjPgw_2nOyGK_X`
-- [ ] Deploy to Vercel (framework preset: Vite)
+- [x] Deploy to Vercel — live at https://portfolio-chi-one-rk68jhdjtx.vercel.app
 - [ ] Submit a real test through the notebook on the live site, then delete it in `/admin`
 
 ## Admin login
 - [ ] Create your admin user in Supabase → Authentication → Users → Add user → Create new user: `terrenceadderley@designsbyta.com`, tick **Auto Confirm User** (sign-in links won't create new users)
 - [x] Add your email to the allow-list (`terrenceadderley@designsbyta.com`)
-- [ ] Supabase → Authentication → URL Configuration: set the Site URL and add `https://<your-domain>/admin` to Redirect URLs
+- [ ] Supabase → Authentication → URL Configuration: Site URL = `https://portfolio-chi-one-rk68jhdjtx.vercel.app`, Redirect URLs += `https://portfolio-chi-one-rk68jhdjtx.vercel.app/admin`
 - [ ] Log in at `/admin` and check the inbox loads
+
+## Launch follow-ups
+- [ ] Open the live URL in a private window to confirm it loads without a Vercel login
+- [ ] Pick the production branch: pushes to `claude/affectionate-noether-ya3rgw` currently make preview deploys, not live ones (create `main` from it, or change the production branch in Vercel)
+- [ ] Optional: connect a custom domain (e.g. designsbyta.com) and update the Supabase URLs to match
 
 ## Fixes
 - [x] Notebook form: "company (optional)" field is clipped at the right edge of the page on desktop
