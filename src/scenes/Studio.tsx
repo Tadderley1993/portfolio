@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
 import { Stage, boxStyle, cameraTo } from '../components/Stage'
 import { Logo } from '../components/Logo'
@@ -35,9 +35,11 @@ export function Studio({ vp, onExit }: StudioProps) {
   const mobile = vp.device === 'mobile'
   const touch = !vp.canHover
   const rect = useMemo(
-    () => computeStage(vp.w, vp.h, { band: [0.13, 0.88], focusX: 0.5, liftY: mobile ? 48 : 0 }),
+    () => computeStage(vp.w, vp.h, { band: [0.13, 0.88], focusX: 0.5, alignTop: mobile }),
     [vp.w, vp.h, mobile],
   )
+  /** Portrait phone: video pinned to the top, desk panel in the space below it. */
+  const stacked = mobile && rect.letterboxed
 
   // Fade in from black on arrival.
   useEffect(() => {
@@ -80,8 +82,12 @@ export function Studio({ vp, onExit }: StudioProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, rect, vp.w, vp.h, mobile, vp.reducedMotion])
 
-  const closeMonitor = useCallback(() => {
-    if (busy.current || focus !== 'monitor') return
+  /** Zoom back out to the desk. `then` runs once the camera has fully settled (instead of focus → desk). */
+  const closeMonitor = useCallback((then?: () => void) => {
+    if (focus !== 'monitor') return
+    // Let a request from inside the computer (e.g. "Book a Call") interrupt an unfinished zoom-in.
+    if (busy.current && !then) return
+    gsap.killTweensOf([camera.current, full.current, preview.current, ui.current])
     busy.current = true
     const bezel = REGIONS.monitorBezel
     const screen = REGIONS.monitorScreen
@@ -93,7 +99,8 @@ export function Studio({ vp, onExit }: StudioProps) {
       onComplete: () => {
         busy.current = false
         setDesktopMounted(false)
-        setFocus('desk')
+        if (then) then()
+        else setFocus('desk')
       },
     })
     tl.to(camera.current, { filter: 'blur(0px) brightness(1)', duration: 0.4 }, 0)
@@ -112,11 +119,9 @@ export function Studio({ vp, onExit }: StudioProps) {
         setNotebookOrigin({ x: rect.left + cx * rect.scale, y: rect.top + cy * rect.scale })
         setFocus('notebook')
       }
-      if (fromMonitor) {
-        busy.current = false
-        closeMonitor()
-        window.setTimeout(go, 1300)
-      } else if (focus === 'desk') go()
+      // From inside the computer: zoom out first, then open the notebook once the camera is back.
+      if (fromMonitor) closeMonitor(go)
+      else if (focus === 'desk') go()
     },
     [rect, focus, setFocus, closeMonitor],
   )
@@ -146,9 +151,9 @@ export function Studio({ vp, onExit }: StudioProps) {
   const previewH = (PREVIEW_W * REGIONS.monitorScreen.h) / REGIONS.monitorScreen.w
 
   const hotspots: { id: Hotspot; shape: string; label: string; anchor: [number, number] }[] = [
-    { id: 'monitor', shape: SHAPES.monitor, label: 'Open the computer', anchor: [639, 240] },
+    { id: 'monitor', shape: SHAPES.monitor, label: 'Open the computer', anchor: [639, 262] },
     { id: 'notebook', shape: SHAPES.notebook, label: 'Book a consultation', anchor: [330, 528] },
-    { id: 'lamp', shape: SHAPES.lamp, label: lampOn ? 'Turn the lamp off' : 'Turn the lamp on', anchor: [1030, 296] },
+    { id: 'lamp', shape: SHAPES.lamp, label: lampOn ? 'Turn the lamp off' : 'Turn the lamp on', anchor: [1030, 318] },
   ]
 
   return (
@@ -234,14 +239,25 @@ export function Studio({ vp, onExit }: StudioProps) {
             style={{ left: `${(h.anchor[0] / 1280) * 100}%`, top: `${(h.anchor[1] / 720) * 100}%` }}
             aria-hidden="true"
           >
-            {touch && <span className="hs-pulse" />}
+            {/* Glowing marker on every device; it's clickable too, so it works even where it
+                sits just off the object. Keyboard users get the SVG hotspot buttons. */}
+            <span
+              className="hs-pulse"
+              onPointerEnter={() => setHover(h.id)}
+              onPointerLeave={() => setHover(null)}
+              onClick={() => activate(h.id)}
+            />
             <span className="hs-text">{h.label}</span>
           </div>
         ))}
         <div className="vignette" />
       </Stage>
 
-      <div className="studio-ui" ref={ui}>
+      <div
+        className={`studio-ui ${stacked ? 'is-stacked' : ''}`}
+        ref={ui}
+        style={{ '--stage-bottom': `${rect.top + rect.height}px` } as CSSProperties}
+      >
         <header className="studio-top">
           <button className="btn-ghost" onClick={leave}>
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6"><path d="M13 8H3M7 4 3 8l4 4" /></svg>
@@ -256,7 +272,39 @@ export function Studio({ vp, onExit }: StudioProps) {
           </p>
         )}
 
-        {mobile && (
+        {stacked && (
+          // Portrait phone: the video sits at the top; this panel fills the space underneath.
+          <section className="desk-panel" aria-label="The desk">
+            <p className="desk-eyebrow">The studio</p>
+            <h1 className="desk-title">Pull up a chair.</h1>
+            <p className="desk-sub">Tap a glowing marker on the desk, or pick a spot below.</p>
+            <nav className="desk-cards" aria-label="Desk">
+              <button onClick={openMonitor}>
+                <svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12" rx="1.5" /><path d="M9 20h6M12 16v4" /></svg>
+                <span className="dc-text">
+                  <span className="dc-title">Our work</span>
+                  <span className="dc-sub">Open the computer: projects, services &amp; more</span>
+                </span>
+              </button>
+              <button onClick={() => openNotebook()} className="is-primary">
+                <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6Z" /><path d="M9 8h6M9 12h6M9 16h3" /></svg>
+                <span className="dc-text">
+                  <span className="dc-title">Book a call</span>
+                  <span className="dc-sub">Tell us about your project in the notebook</span>
+                </span>
+              </button>
+              <button onClick={toggleLamp} aria-pressed={lampOn}>
+                <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg>
+                <span className="dc-text">
+                  <span className="dc-title">{lampOn ? 'Lamp on' : 'Lamp'}</span>
+                  <span className="dc-sub">{lampOn ? 'Tap to switch it off' : 'Set the mood'}</span>
+                </span>
+              </button>
+            </nav>
+          </section>
+        )}
+
+        {mobile && !stacked && (
           <nav className="tool-tray" aria-label="Desk">
             <button onClick={openMonitor}>
               <svg viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12" rx="1.5" /><path d="M9 20h6M12 16v4" /></svg>
@@ -278,9 +326,9 @@ export function Studio({ vp, onExit }: StudioProps) {
       <div className="computer" ref={full} style={{ display: 'none' }}>
         {desktopMounted &&
           (mobile ? (
-            <PhoneOS onBook={() => openNotebook(true)} onExit={closeMonitor} />
+            <PhoneOS onBook={() => openNotebook(true)} onExit={() => closeMonitor()} />
           ) : (
-            <Desktop touch={touch} onBook={() => openNotebook(true)} onExit={closeMonitor} />
+            <Desktop touch={touch} onBook={() => openNotebook(true)} onExit={() => closeMonitor()} />
           ))}
       </div>
 

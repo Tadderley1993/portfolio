@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import gsap from 'gsap'
 import { Stage, cameraTo } from '../components/Stage'
 import { Logo } from '../components/Logo'
@@ -21,9 +21,11 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
 
   // Keep the building (and the target window) in frame on narrow screens.
   const rect = useMemo(
-    () => computeStage(vp.w, vp.h, { band: [0.2, 0.78], focusX: 0.52 }),
+    () => computeStage(vp.w, vp.h, { band: [0.2, 0.78], focusX: 0.52, alignTop: vp.device === 'mobile' }),
     [vp.w, vp.h],
   )
+  /** Portrait phone: video pinned to the top, page content in the space below it. */
+  const stacked = vp.device === 'mobile' && rect.letterboxed
 
   useEffect(() => {
     if (!active) {
@@ -68,7 +70,11 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
         <div className="vignette" />
       </Stage>
 
-      <div className="exterior-ui" ref={ui}>
+      <div
+        className={`exterior-ui ${stacked ? 'is-stacked' : ''}`}
+        ref={ui}
+        style={{ '--stage-bottom': `${rect.top + rect.height}px` } as CSSProperties}
+      >
         <header className="exterior-top">
           <Logo className="brand-mark" />
           <span className="exterior-tag">Design &amp; Development Studio</span>
@@ -80,12 +86,25 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
             <br />
             <em>websites worth visiting.</em>
           </h1>
+          {stacked && (
+            <p className="exterior-intro">
+              An independent design &amp; development studio. Step inside to explore our work, or book a call from
+              the desk.
+            </p>
+          )}
           <button className="btn-pill" onClick={enter} disabled={leaving}>
             Enter The Studio
             <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
               <path d="M3 8h10M9 4l4 4-4 4" />
             </svg>
           </button>
+          {stacked && (
+            <ul className="exterior-services" aria-label="Services">
+              <li>Web Design</li>
+              <li>Development</li>
+              <li>Branding</li>
+            </ul>
+          )}
         </div>
       </div>
       <div className="fade-black" ref={black} />

@@ -85,7 +85,7 @@ export function Desktop({ preview, touch = false, onBook, onExit }: DesktopProps
   const items = DESKTOP_ITEMS.map((id) => FS.get(id)!)
 
   return (
-    <OsContext.Provider value={{ openItem, onBook, onExit, compact: false, touch }}>
+    <OsContext.Provider value={{ openItem, onBook, onExit, compact: false, touch, preview }}>
       <div
         ref={root}
         className={`os ${preview ? 'is-preview' : ''}`}

@@ -11,6 +11,8 @@ export interface OsContextValue {
   compact: boolean
   /** Touch input: single tap opens items. */
   touch: boolean
+  /** Rendered as the small, non-interactive picture on the monitor. */
+  preview?: boolean
 }
 
 export const OsContext = createContext<OsContextValue>({

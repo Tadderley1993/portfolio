@@ -77,37 +77,9 @@
   transition: opacity 300ms ease;
   pointer-events: none;
 }
-.hotspot.is-hover .hs-glow {
-  opacity: 1;
-}
-.hotspot.is-hover .hs-edge {
-  opacity: 1;
-}
-/* the notebook breathes gently to invite interaction */
-.hotspot-notebook .hs-glow {
-  animation: nb-breathe 3.2s ease-in-out infinite;
-}
-.hotspot-notebook.is-hover .hs-glow {
-  animation: none;
-}
-@keyframes nb-breathe {
-  0%,
-  100% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.45;
-  }
-}
-/* the monitor glow is a subtle screen-light bloom instead of a hard outline */
-.hotspot-monitor .hs-glow {
-  fill: rgba(150, 200, 255, 0.12);
-  stroke: rgba(170, 210, 255, 0.5);
-}
-.hotspot-monitor .hs-edge {
-  stroke: rgba(200, 225, 255, 0.7);
-  fill: transparent;
-}
+/* The traced outlines (.hs-glow / .hs-edge) stay hidden: every device now uses the glowing
+   marker (.hs-pulse) instead, and the polygons only act as the invisible click area.
+   Keyboard focus on a hotspot counts as hover, so its marker grows and its label shows. */
 
 .hs-label {
   position: absolute;
@@ -154,10 +126,27 @@
   background: var(--warm);
   box-shadow: 0 0 0 0 rgba(255, 201, 133, 0.7);
   animation: pulse 1.8s ease-out infinite;
+  pointer-events: auto;
+  cursor: pointer;
+  transition:
+    transform 250ms var(--ease-out),
+    background-color 250ms;
+}
+/* Hovering the object (or the marker) brightens and grows the marker */
+.hs-label.is-visible .hs-pulse {
+  transform: scale(1.35);
+  background: #ffe2b8;
+  animation-duration: 1.1s;
 }
 @keyframes pulse {
   to {
     box-shadow: 0 0 0 16px rgba(255, 201, 133, 0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hs-pulse {
+    animation: none;
+    box-shadow: 0 0 0 5px rgba(255, 201, 133, 0.3);
   }
 }
 
@@ -248,5 +237,103 @@
 @media (max-width: 767px) {
   .studio.is-touch .hs-text {
     display: none;
+  }
+}
+
+/* ───── Portrait phone: video pinned to the top, desk panel underneath ───── */
+.studio-ui.is-stacked {
+  background: linear-gradient(to bottom, rgba(5, 6, 8, 0.5), transparent 12%);
+}
+.desk-panel {
+  position: absolute;
+  left: max(20px, env(safe-area-inset-left));
+  right: max(20px, env(safe-area-inset-right));
+  top: calc(var(--stage-bottom) + 18px);
+  bottom: max(18px, env(safe-area-inset-bottom));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+}
+.desk-eyebrow {
+  margin: 0;
+  font: 500 11px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--warm);
+}
+.desk-title {
+  margin: 4px 0 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(26px, 7.6vw, 34px);
+  line-height: 1.1;
+}
+.desk-sub {
+  margin: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.45;
+  color: rgba(244, 239, 230, 0.72);
+}
+.desk-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.desk-cards button {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  text-align: left;
+  background: rgba(12, 13, 17, 0.55);
+  border: 1px solid var(--line);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.desk-cards button.is-primary {
+  background: var(--paper);
+  color: var(--ink);
+  border-color: transparent;
+}
+.desk-cards button[aria-pressed='true'] {
+  background: rgba(255, 201, 133, 0.22);
+  border-color: rgba(255, 201, 133, 0.45);
+  color: var(--warm);
+}
+.desk-cards svg {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.dc-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.dc-title {
+  font-size: 15px;
+  font-weight: 600;
+}
+.dc-sub {
+  font-size: 12.5px;
+  opacity: 0.72;
+}
+/* Short phones: tighter spacing so the cards still fit */
+@media (max-height: 700px) {
+  .desk-sub {
+    display: none;
+  }
+  .desk-cards button {
+    padding: 10px 14px;
   }
 }

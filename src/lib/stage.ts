@@ -24,6 +24,9 @@ export interface FramingOptions {
   focusX?: number
   /** Vertical offset in px applied when letterboxed (e.g. lift above a bottom tray). */
   liftY?: number
+  /** When letterboxed (portrait phones), pin the video to the top of the screen instead of
+   *  centring it; the space underneath is then used for page content. */
+  alignTop?: boolean
 }
 
 export function computeStage(vw: number, vh: number, opts: FramingOptions): StageRect {
@@ -52,7 +55,7 @@ export function computeStage(vw: number, vh: number, opts: FramingOptions): Stag
   const height = (width * VIDEO_H) / VIDEO_W
   const bandCenter = (opts.band[0] + opts.band[1]) / 2
   const left = vw / 2 - width * bandCenter
-  const top = Math.max(0, (vh - height) / 2 - (opts.liftY ?? 0))
+  const top = opts.alignTop ? 0 : Math.max(0, (vh - height) / 2 - (opts.liftY ?? 0))
   return { left, top, width, height, scale: width / VIDEO_W, letterboxed: true }
 }
 
