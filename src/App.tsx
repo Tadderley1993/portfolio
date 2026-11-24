@@ -4,6 +4,7 @@ import { useViewport } from './lib/device'
 import { useExperience } from './store'
 import { Intro } from './scenes/Intro'
 import { Exterior } from './scenes/Exterior'
+import { videoSources } from './components/SceneVideo'
 
 // The studio (desk, desktop OS, notebook form) is its own chunk so the first load only carries the
 // intro + exterior. It's prefetched while the exterior is on screen, so entering is still instant.
@@ -38,13 +39,17 @@ function Experience() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.pathname])
 
-  // Warm the studio video while on the exterior so the transition is instant.
+  // Warm the studio video while on the exterior so the transition is instant. Same file the studio
+  // will pick (see videoSources), and started a little later so it doesn't compete with the exterior.
   useEffect(() => {
     const link = document.createElement('link')
     link.rel = 'prefetch'
-    link.href = `/media/studio-${vp.device === 'mobile' ? '540.mp4' : '720.webm'}`
-    document.head.appendChild(link)
-    return () => link.remove()
+    link.href = videoSources('studio', vp.device === 'mobile')[0].src
+    const t = window.setTimeout(() => document.head.appendChild(link), 2500)
+    return () => {
+      window.clearTimeout(t)
+      link.remove()
+    }
   }, [vp.device])
 
   // Fetch the studio code in the background once the first screen has had a moment to load.

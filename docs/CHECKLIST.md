@@ -1,23 +1,21 @@
 # d> Studio — To-do checklist
 
 **Live:** https://portfolio-chi-one-rk68jhdjtx.vercel.app · **Admin:** `/admin`
-**Last updated:** November 23, 2026
+**Last updated:** November 24, 2026
 
 ## Next session: start here
 
 The site is launched and working end to end: the form saves to Supabase, the admin inbox shows
 submissions, and pushes to `main` deploy automatically. Next up, in suggested order:
 
-1. **Sharper videos:** get the upscaled exterior + studio clips into `media-src/` (exterior is >30 MB),
-   then re-encode at 1080p + 720p/540p with higher quality and serve by screen size.
-2. **Real content:** replace the placeholders in `src/content/`:
+1. **Real content:** replace the placeholders in `src/content/`:
    - `projects.ts`: Concept Work and Client Work projects (browser app)
    - `docs.ts`: Mission Statement, About the Studio, the three Services docs
    - `fs.ts`: desktop folders and icons
    - Project screenshots go in `public/` (e.g. `public/work/<project>/`)
-3. **Custom domain** (optional): add it in Vercel, then update Supabase → Authentication →
+2. **Custom domain** (optional): add it in Vercel, then update Supabase → Authentication →
    URL Configuration (Site URL + `/admin` redirect URL).
-4. **Email alerts** (optional): Supabase Edge Function + Resend; needs a Resend API key.
+3. **Email alerts** (optional): Supabase Edge Function + Resend; needs a Resend API key.
 
 ## Working setup (for reference)
 
@@ -47,6 +45,7 @@ submissions, and pushes to `main` deploy automatically. Next up, in suggested or
 - [x] Terminal: fixed desktop crash; `ls [folder]`, fuzzy `open`, history, `date`/`echo`/`pwd`; no iPhone autocorrect
 - [x] Desktop/tablet hotspots use the glowing markers (clickable) instead of traced outlines
 - [x] Phones: videos pinned to the top; intro + services under the exterior, desk cards under the studio
+- [x] Sharper videos: 4K Higgsfield upscales → 1080p/720p (30fps, higher quality), chosen by screen size
 
 ## To do
 

@@ -16,11 +16,16 @@ npm run dev
 
 ## Media
 
-Source videos live in `media-src/`. Re-encode (strips audio, bakes seamless loops, makes 720p/540p + posters):
+Source videos live in `media-src/` (`exterior.mp4`, `studio.mp4`: 4K/60fps upscales from Higgsfield).
+Re-encode (strips audio, 30fps, bakes seamless loops, makes 1080p + 720p WebM/MP4 + posters):
 
 ```bash
 ./scripts/encode-media.sh
 ```
+
+`SceneVideo` picks 1080p when the screen needs more than ~1500 device pixels across, 720p otherwise;
+phones (and the blurred backdrop) always use the 720p MP4. Hotspot positions assume the same framing
+as the current clips, so check them if a replacement video is re-cut or re-framed.
 
 ## Content
 

@@ -28,3 +28,4 @@ dist-ssr
 .env.*
 !.env.example
 media-src/*.loop.mp4
+media-src/*.tmp.mp4
