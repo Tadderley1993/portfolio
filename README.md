@@ -59,3 +59,14 @@ Vercel project **portfolio**, framework preset **Vite**, linked to this GitHub r
   environments. The `SUPABASE_*` / `POSTGRES_*` / `NEXT_PUBLIC_*` variables came from the Supabase
   integration and aren't used by this site.
 - `vercel.json` handles SPA routes and long-term caching for `/media`.
+
+## Agents
+
+Project agents in `.claude/agents/`, available in any Claude Code session on this repo:
+
+- **concept-site-designer**: researches industries and designs/builds the five concept sites
+  (`docs/CONCEPTS.md`, `public/concepts/`). Start with "plan the concepts", then "build concept <slug>".
+- **studio-copywriter**: writes the "About the Studio" and "Our Mission Statement" documents
+  (`src/content/docs.ts`). Ask for voice options first if you're unsure of the tone.
+- **mobile-ui-designer**: designs and verifies the phone experience (exterior, desk, Phone OS,
+  notebook) without changing desktop.
