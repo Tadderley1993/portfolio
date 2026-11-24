@@ -10,7 +10,7 @@ export function Admin() {
   const [ready, setReady] = useState(false)
 
   useEffect(() => {
-    document.title = 'Admin — d> Studio'
+    document.title = 'Admin — Designs By Terrence Adderley'
     if (!supabase) return setReady(true)
     supabase.auth.getSession().then(({ data }) => {
       setSession(data.session)
@@ -250,7 +250,7 @@ function Detail({ row, onUpdate }: { row: Consultation; onUpdate: (p: Partial<Co
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} onBlur={() => notes !== (row.admin_notes ?? '') && onUpdate({ admin_notes: notes })} rows={4} placeholder="Only visible to admins" />
       <a
         className="admin-btn is-primary"
-        href={`mailto:${row.email}?subject=${encodeURIComponent('Your project with d> Studio')}&body=${encodeURIComponent(`Hi ${row.name.split(' ')[0]},\n\n`)}`}
+        href={`mailto:${row.email}?subject=${encodeURIComponent('Your project with Designs By Terrence Adderley')}&body=${encodeURIComponent(`Hi ${row.name.split(' ')[0]},\n\n`)}`}
         onClick={() => row.status === 'new' && onUpdate({ status: 'contacted' })}
       >
         Reply by email

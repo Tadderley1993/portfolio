@@ -127,7 +127,7 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
             <p className="nb-hand">
               We’ll read this properly and get back to you within one business day.
             </p>
-            <p className="nb-sign">— the d&gt; studio</p>
+            <p className="nb-sign">— Designs By Terrence Adderley</p>
             <button className="nb-submit" onClick={close}>
               Back to the desk
             </button>

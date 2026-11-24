@@ -46,7 +46,7 @@ function StartPage() {
   const { browse } = useWm()
   return (
     <div className="startpage">
-      <p className="startpage-kicker">d&gt; Studio · Bookmarks</p>
+      <p className="startpage-kicker">Designs By Terrence Adderley · Bookmarks</p>
       <h2>Where to next?</h2>
       <div className="startpage-grid">
         {PROJECTS.map((p) => (

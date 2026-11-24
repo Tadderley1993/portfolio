@@ -65,7 +65,7 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
   }
 
   return (
-    <main className="exterior" aria-label="d> Studio exterior">
+    <main className="exterior" aria-label="Designs By Terrence Adderley exterior">
       <Stage name="exterior" rect={rect} small={vp.device === 'mobile'} ref={camera}>
         <div className="vignette" />
       </Stage>

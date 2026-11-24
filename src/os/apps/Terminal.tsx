@@ -88,7 +88,7 @@ export function Terminal() {
         return `opening ${item.name}…`
       }
       case 'whoami':
-        return 'd> — a design & development studio. (placeholder bio)'
+        return 'Designs By Terrence Adderley (DBTA) — a design & development studio founded by Terrence Adderley.'
       case 'contact':
       case 'book':
         window.setTimeout(onBook, 400)
