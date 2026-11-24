@@ -217,7 +217,7 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
             )}
 
             <button className="nb-submit" type="submit" disabled={state.kind === 'sending'}>
-              {state.kind === 'sending' ? 'Sending…' : 'Schedule my consultation →'}
+              {state.kind === 'sending' ? 'Sending…' : 'Book my consultation →'}
             </button>
           </form>
         )}

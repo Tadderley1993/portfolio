@@ -69,7 +69,7 @@
 
 .intro-caption {
   margin: 0;
-  font: 500 11px/1 var(--font-mono);
+  font: 500 12px/1 var(--font-mono);
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--paper-dim);
@@ -93,7 +93,9 @@
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--paper-dim);
-  padding: 10px 12px;
+  padding: 10px 14px;
+  min-width: 64px;
+  min-height: 44px;
 }
 .intro-skip:hover,
 .intro-skip:focus-visible {

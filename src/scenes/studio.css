@@ -115,7 +115,7 @@
 .studio.is-touch .hs-text {
   opacity: 0.92;
   transform: none;
-  font-size: 11px;
+  font-size: 12px;
   padding: 5px 9px;
 }
 .hs-pulse {
@@ -175,7 +175,7 @@
 }
 .studio-hint {
   margin: auto auto 0;
-  font: 500 11px/1.4 var(--font-mono);
+  font: 500 12px/1.4 var(--font-mono);
   letter-spacing: 0.14em;
   text-transform: uppercase;
   text-align: center;
@@ -257,7 +257,7 @@
 }
 .desk-eyebrow {
   margin: 0;
-  font: 500 11px/1 var(--font-mono);
+  font: 500 12px/1 var(--font-mono);
   letter-spacing: 0.16em;
   text-transform: uppercase;
   color: var(--warm);
@@ -335,5 +335,20 @@
   }
   .desk-cards button {
     padding: 10px 14px;
+  }
+}
+
+/* Phones: bigger touch targets for "Step outside" and the glowing markers. */
+@media (pointer: coarse) {
+  .studio-top .btn-ghost {
+    min-height: 44px;
+  }
+  .hs-pulse {
+    position: relative;
+  }
+  .hs-pulse::after {
+    content: '';
+    position: absolute;
+    inset: -15px;
   }
 }

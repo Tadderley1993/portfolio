@@ -357,7 +357,7 @@
   font-size: 13px;
 }
 .finder-meta {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--paper-faint);
   margin-top: -6px;
 }
@@ -475,6 +475,7 @@
 .browser-nav button {
   width: 28px;
   height: 28px;
+  position: relative;
   display: grid;
   place-items: center;
   border-radius: 7px;
@@ -539,7 +540,7 @@
 }
 .startpage-kicker {
   margin: 0;
-  font: 500 11px/1 var(--font-mono);
+  font: 500 12px/1 var(--font-mono);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--paper-faint);
@@ -727,6 +728,7 @@
 }
 .term-form input {
   flex: 1;
+  min-width: 0;
   background: none;
   border: 0;
   outline: none;
@@ -793,6 +795,11 @@
   font-size: 15px;
   font-weight: 600;
 }
+.phone-back {
+  justify-self: start;
+  min-height: 44px;
+  padding-right: 12px;
+}
 .phone-brand svg {
   width: 22px;
 }
@@ -814,8 +821,8 @@
 }
 .phone-close {
   justify-self: end;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -874,4 +881,13 @@
 }
 .phone-app .mock-nav span:not(.mock-cta) {
   display: none;
+}
+/* iOS zooms the page when an input under 16px gets focus. */
+.phone-app .term-form input {
+  font-size: 16px;
+}
+/* Phones: 44px touch targets for the browser's back / forward / home. */
+.phone-app .browser-nav button {
+  width: 44px;
+  height: 44px;
 }
