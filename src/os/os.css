@@ -837,6 +837,8 @@
   gap: 22px 10px;
   align-content: start;
   overflow: auto;
+  flex: 1;
+  min-height: 0;
 }
 .phone-icon {
   width: 100%;
@@ -881,6 +883,35 @@
 }
 .phone-app .mock-nav span:not(.mock-cta) {
   display: none;
+}
+/* Docked booking bar at the bottom of the phone computer */
+.phone-book {
+  flex: none;
+  padding: 10px 14px max(10px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(13, 16, 21, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.phone-book button {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+}
+.phone-book svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
 }
 /* iOS zooms the page when an input under 16px gets focus. */
 .phone-app .term-form input {

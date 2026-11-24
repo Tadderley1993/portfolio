@@ -222,6 +222,22 @@
   left: -9999px;
 }
 
+.nb-field {
+  flex-wrap: wrap;
+}
+.nb-err {
+  flex-basis: 100%;
+  margin-top: 2px;
+  font-size: 19px;
+  line-height: 1.2;
+  color: #b3261e;
+}
+.nb-field [aria-invalid='true'] {
+  border-bottom-color: #b3261e;
+}
+.nb-message textarea[aria-invalid='true'] {
+  border-color: #b3261e;
+}
 .nb-error {
   font-size: 21px;
   color: #b3261e;

@@ -8,6 +8,7 @@ import { useExperience } from '../store'
 import { Desktop } from '../os/Desktop'
 import { PhoneOS } from '../os/PhoneOS'
 import { NotebookForm } from '../studio/NotebookForm'
+import { useBackLayer } from '../lib/backLayer'
 import './studio.css'
 
 interface StudioProps {
@@ -112,6 +113,17 @@ export function Studio({ vp, onExit }: StudioProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, rect, vp.w, vp.h])
 
+  /** Put the camera back at the desk with no animation (used behind the notebook sheet on phones). */
+  const resetMonitorInstantly = useCallback(() => {
+    gsap.killTweensOf([camera.current, full.current, preview.current, ui.current])
+    gsap.set(camera.current, { x: 0, y: 0, scale: 1, filter: 'blur(0px) brightness(1)' })
+    gsap.set(full.current, { autoAlpha: 0, display: 'none' })
+    gsap.set(preview.current, { autoAlpha: 1 })
+    gsap.set(ui.current, { autoAlpha: 1 })
+    busy.current = false
+    setDesktopMounted(false)
+  }, [])
+
   const openNotebook = useCallback(
     (fromMonitor = false) => {
       const go = () => {
@@ -119,12 +131,20 @@ export function Studio({ vp, onExit }: StudioProps) {
         setNotebookOrigin({ x: rect.left + cx * rect.scale, y: rect.top + cy * rect.scale })
         setFocus('notebook')
       }
-      // From inside the computer: zoom out first, then open the notebook once the camera is back.
-      if (fromMonitor) closeMonitor(go)
-      else if (focus === 'desk') go()
+      if (fromMonitor && mobile) {
+        // Phones: slide the sheet straight up over the computer, then quietly reset the desk behind it.
+        go()
+        window.setTimeout(resetMonitorInstantly, 550)
+      } else if (fromMonitor) {
+        // Desktop: zoom out first, then open the notebook once the camera is back.
+        closeMonitor(go)
+      } else if (focus === 'desk') go()
     },
-    [rect, focus, setFocus, closeMonitor],
+    [rect, focus, setFocus, closeMonitor, mobile, resetMonitorInstantly],
   )
+
+  // Back gesture / browser Back leaves the computer instead of leaving the studio.
+  useBackLayer(focus === 'monitor', () => closeMonitor(() => setFocus('desk')))
 
   // Esc leaves the computer
   useEffect(() => {
