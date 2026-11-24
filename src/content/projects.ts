@@ -18,6 +18,13 @@ export interface Project {
   sections: { heading: string; body: string }[]
   /** Optional real full-page screenshots; when present they replace the mock. */
   screenshots?: string[]
+  /**
+   * A real, self-contained concept site under /public, e.g. '/concepts/harbor-and-oak/'.
+   * When set, the desktop browser loads it live (scrollable, clickable) instead of the mock.
+   */
+  site?: string
+  /** Thumbnail image (16:10) for the browser start page and the small monitor preview. */
+  thumb?: string
 }
 
 export const PROJECTS: Project[] = [

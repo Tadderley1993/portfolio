@@ -31,8 +31,8 @@ export function Browser() {
           <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="4" y="7" width="8" height="6" rx="1" /><path d="M5.5 7V5.5a2.5 2.5 0 0 1 5 0V7" /></svg>
           <span>{url}</span>
         </div>
-        {project?.liveUrl && (
-          <a className="browser-live" href={project.liveUrl} target="_blank" rel="noreferrer">
+        {(project?.liveUrl || project?.site) && (
+          <a className="browser-live" href={project.liveUrl ?? project.site} target="_blank" rel="noreferrer">
             Visit live site ↗
           </a>
         )}
@@ -51,10 +51,14 @@ function StartPage() {
       <div className="startpage-grid">
         {PROJECTS.map((p) => (
           <button key={p.id} className="startpage-card" onClick={() => browse(p.id)}>
-            <span className="startpage-thumb" style={{ background: p.palette.bg, color: p.palette.fg }}>
-              <span style={{ background: p.palette.accent }} />
-              {p.title}
-            </span>
+            {p.thumb ? (
+              <img className="startpage-thumb startpage-thumb-img" src={p.thumb} alt="" loading="lazy" />
+            ) : (
+              <span className="startpage-thumb" style={{ background: p.palette.bg, color: p.palette.fg }}>
+                <span style={{ background: p.palette.accent }} />
+                {p.title}
+              </span>
+            )}
             <span className="startpage-label">{p.url}</span>
           </button>
         ))}
@@ -65,6 +69,13 @@ function StartPage() {
 
 /** Placeholder site mock built from the project's palette. Replaced by screenshots when provided. */
 function ProjectPage({ p }: { p: Project }) {
+  const { preview } = useOs()
+  // A real concept site: load it live. The small monitor preview shows the thumbnail instead,
+  // so the site isn't loaded twice.
+  if (p.site) {
+    if (preview) return p.thumb ? <img className="projsite-thumb" src={p.thumb} alt="" /> : null
+    return <iframe className="projsite" src={p.site} title={`${p.title} (concept site)`} loading="lazy" />
+  }
   if (p.screenshots?.length) {
     return (
       <div className="projshots">
