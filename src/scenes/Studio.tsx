@@ -85,7 +85,7 @@ export function Studio({ vp, onExit }: StudioProps) {
   /** Zoom back out to the desk. `then` runs once the camera has fully settled (instead of focus → desk). */
   const closeMonitor = useCallback((then?: () => void) => {
     if (focus !== 'monitor') return
-    // Let a request from inside the computer (e.g. "Book a Call") interrupt an unfinished zoom-in.
+    // Let a request from inside the computer (e.g. "Book a Consultation") interrupt an unfinished zoom-in.
     if (busy.current && !then) return
     gsap.killTweensOf([camera.current, full.current, preview.current, ui.current])
     busy.current = true
@@ -289,7 +289,7 @@ export function Studio({ vp, onExit }: StudioProps) {
               <button onClick={() => openNotebook()} className="is-primary">
                 <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6Z" /><path d="M9 8h6M9 12h6M9 16h3" /></svg>
                 <span className="dc-text">
-                  <span className="dc-title">Book a call</span>
+                  <span className="dc-title">Book a consultation</span>
                   <span className="dc-sub">Tell us about your project in the notebook</span>
                 </span>
               </button>
@@ -312,7 +312,7 @@ export function Studio({ vp, onExit }: StudioProps) {
             </button>
             <button onClick={() => openNotebook()} className="is-primary">
               <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6Z" /><path d="M9 8h6M9 12h6M9 16h3" /></svg>
-              Book a call
+              Book a consultation
             </button>
             <button onClick={toggleLamp} aria-pressed={lampOn}>
               <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg>

@@ -88,7 +88,7 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
           </h1>
           {stacked && (
             <p className="exterior-intro">
-              An independent design &amp; development studio. Step inside to explore our work, or book a call from
+              An independent design &amp; development studio. Step inside to explore our work, or book a consultation from
               the desk.
             </p>
           )}

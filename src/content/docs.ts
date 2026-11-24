@@ -1,4 +1,4 @@
-/** Documents opened in the desktop's word-processor view. Placeholder copy. */
+/** Documents opened in the desktop's word-processor view. Mission and About are final; service docs are placeholders. */
 export type DocBlock =
   | { type: 'title'; text: string }
   | { type: 'subtitle'; text: string }
@@ -19,21 +19,48 @@ export const DOCS: Doc[] = [
     filename: 'Our Mission Statement.docx',
     blocks: [
       { type: 'title', text: 'Our Mission' },
-      { type: 'subtitle', text: 'd> Studio — Design & Development' },
+      { type: 'subtitle', text: 'Designs By Terrence Adderley — Design & Development' },
       {
         type: 'quote',
-        text: 'Placeholder — a one-sentence mission statement that says why the studio exists.',
+        text: 'Most websites get scrolled past. We design and build the ones people stop for: fast, accessible sites that turn visitors into customers.',
       },
       { type: 'h2', text: 'What we believe' },
       {
         type: 'p',
-        text: 'Placeholder paragraph. Describe the values that shape how the studio designs and builds — craft, clarity, partnership, performance.',
+        text: "People don't buy websites. They pay for more sales and a better experience for their customers. Every decision we make is measured against those two things.",
       },
-      { type: 'list', items: ['Placeholder belief one', 'Placeholder belief two', 'Placeholder belief three'] },
+      {
+        type: 'list',
+        items: [
+          "Every page has a job. Book, buy, call, visit. If a page doesn't move someone toward it, it goes.",
+          "Ordinary is invisible. If your site looks like everyone else's, customers can't tell you apart.",
+          "Speed is measured, not promised. Every site we design is tested for load time on phones before launch, because that's where many of your customers arrive.",
+          'Accessible by default. A site that works with a keyboard and a screen reader works better for everyone, and reaches more people.',
+          'Taste is a business decision. Careful type, generous space and real restraint tell customers you take your work seriously.',
+        ],
+      },
       { type: 'h2', text: 'How we work' },
       {
         type: 'p',
-        text: 'Placeholder paragraph. Explain the process from first call to launch and beyond.',
+        text: 'Design and development happen under one roof, so what we draw is what ships. When a project calls for specialist work such as photography, we bring in trusted partners case by case.',
+      },
+      {
+        type: 'list',
+        items: [
+          'Consultation. Your goals, your customers, your current site and what success looks like.',
+          'Proposal. One clear direction, with scope, timeline and cost agreed in writing before work begins.',
+          'Design. Page layouts and a visual system, reviewed with you at each stage.',
+          'Build and test. Clean code, checked for speed, accessibility and every common screen size.',
+          'Launch and care. We put it live and handle your updates from there, so you never have to touch the code.',
+        ],
+      },
+      {
+        type: 'p',
+        text: 'Already have a site that feels slow? We offer performance optimization for existing websites as a separate, quoted service.',
+      },
+      {
+        type: 'p',
+        text: 'Worth a conversation? Book a consultation from the notebook on the desk. We reply within one business day.',
       },
     ],
   },
@@ -43,9 +70,12 @@ export const DOCS: Doc[] = [
     blocks: [
       { type: 'title', text: 'About the Studio' },
       { type: 'subtitle', text: 'Who we are' },
-      { type: 'p', text: 'Placeholder — a short studio bio: when it started, where it is, who it serves.' },
+      {
+        type: 'p',
+        text: 'Designs By Terrence Adderley (DBTA) is a design and development studio founded by Terrence Adderley. We design and build websites for businesses that want more than an online presence: more sales, and a better experience for their customers.',
+      },
       { type: 'h2', text: 'The team' },
-      { type: 'list', items: ['Name — Founder & Creative Director', 'Name — Lead Developer', 'Name — Designer'] },
+      { type: 'list', items: ['Terrence Adderley — Founder & CEO'] },
     ],
   },
   {

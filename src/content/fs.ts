@@ -19,7 +19,7 @@ const items: FsItem[] = [
   { kind: 'app', id: 'a-browser', name: 'Browser', app: 'browser' },
   { kind: 'app', id: 'a-terminal', name: 'Terminal', app: 'terminal' },
   { kind: 'app', id: 'a-trash', name: 'Trash', app: 'trash' },
-  { kind: 'app', id: 'a-notebook', name: 'Book a Call', app: 'notebook' },
+  { kind: 'app', id: 'a-notebook', name: 'Book a Consultation', app: 'notebook' },
   ...PROJECTS.map((p): FsItem => ({ kind: 'project', id: `p-${p.id}`, name: p.title, projectId: p.id })),
 ]
 
