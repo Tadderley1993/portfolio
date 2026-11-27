@@ -13,10 +13,11 @@
   --danger: #ff7a6b;
   --ok: #8fdca2;
 
-  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
-  --font-mono: 'Geist Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Spline Sans Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
   --font-hand: 'Caveat', 'Bradley Hand', cursive;
-  --font-serif: 'Newsreader', Georgia, serif;
+  /* Display face from the DBTA design system: Gloock, regular weight, no italic. */
+  --font-serif: 'Gloock', Georgia, serif;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --radius: 12px;
@@ -86,20 +87,18 @@ svg {
   border: 0;
 }
 
-/* Shared pill button used on the scenes */
+/* Shared primary button used on the scenes (DBTA radius-lg) */
 .btn-pill {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  padding: 14px 22px;
-  border-radius: 999px;
+  padding: 15px 24px;
+  border-radius: 12px;
   font-weight: 500;
   letter-spacing: 0.01em;
   color: var(--ink);
   background: var(--paper);
-  box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.35),
-    inset 0 -2px 0 rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   transition:
     transform 300ms var(--ease-out),
     box-shadow 300ms var(--ease-out),
@@ -108,7 +107,6 @@ svg {
 .btn-pill:hover {
   transform: translateY(-2px);
   background: #fff;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 .btn-pill svg {
   width: 16px;
@@ -124,8 +122,8 @@ svg {
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-radius: 999px;
-  font-size: 13px;
+  border-radius: 12px;
+  font-size: 14px;
   font-weight: 500;
   color: var(--paper);
   background: rgba(10, 11, 14, 0.45);

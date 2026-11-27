@@ -69,9 +69,8 @@
 
 .intro-caption {
   margin: 0;
-  font: 500 12px/1 var(--font-mono);
-  letter-spacing: 0.24em;
-  text-transform: uppercase;
+  font-size: 15px;
+  line-height: 1;
   color: var(--paper-dim);
   min-height: 1em;
 }
@@ -89,9 +88,8 @@
   position: absolute;
   right: max(20px, env(safe-area-inset-right));
   bottom: max(20px, env(safe-area-inset-bottom));
-  font: 500 12px/1 var(--font-mono);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 500;
   color: var(--paper-dim);
   padding: 10px 14px;
   min-width: 64px;
