@@ -14,11 +14,11 @@ No two rows may share a palette family, type pairing, layout archetype, signatur
 
 | # | Slug | Industry | Palette family | Type pairing | Layout archetype | Signature interaction | Mood | Status |
 |---|------|----------|----------------|--------------|------------------|-----------------------|------|--------|
-| 1 | `saltbloom` | Independent restaurant (coastal small plates + natural wine) | Dark warm: aubergine-black, candle cream, ember orange | Instrument Serif + Hanken Grotesk | Single-column "printed menu card" editorial with full-bleed chapter breaks | **Set the table**: tapping dishes places SVG plates on a top-down table that feeds the reservation | Candlelit, intimate, sensual | Planned |
-| 2 | `keel-and-kerf` | Residential renovation (design-build kitchens, baths, additions) | Bone paper, blueprint navy, safety yellow | Archivo (Expanded/Black) + IBM Plex Mono | Technical-drawing grid: annotated dimension lines, spec-sheet tables, sticky side panel | **Ballpark builder**: room/size/finish estimator whose price range animates along a tape-measure ruler | Precise, straight-talking, dependable | Planned |
-| 3 | `cruxwell` | Bouldering gym (day passes, intro sessions, memberships) | Chalk white + multi-colour "hold" pop (orange, blue, green, pink) on black ink | Bricolage Grotesque + Atkinson Hyperlegible | Anti-grid sticker collage: tilted cards, oversized marquee type, overlapping blocks | **The Wall**: an SVG wall of holds; tap a colour circuit to light up that route and filter this week's problems | Loud, playful, communal | Planned |
-| 4 | `paperkite-vet` | Independent veterinary clinic (general practice + urgent same-day) | Pastel mint, deep pine, apricot, sky | Young Serif + Figtree | Soft rounded bento dashboard: "today at the clinic" tiles, one-question-at-a-time flows | **Is this urgent?**: a calm step-by-step triage helper that routes to call / same-day / routine booking while a paper kite climbs its string | Gentle, reassuring, kind | Planned |
-| 5 | `ninebark` | Boutique countryside inn (8 rooms, direct booking) | Earth neutrals: fog stone, charcoal moss, bark rust, lichen | Cormorant Garamond + Manrope | Horizontal-scroll cinematic panels (vertical scroll drives a sideways journey), vertical stack on mobile | **Season dial**: a rotary dial that re-colours an SVG landscape and swaps rates, room notes and itineraries for each season | Slow, hushed, restorative | Planned |
+| 1 | `saltbloom` | Independent restaurant (coastal small plates + natural wine) | Dark warm: aubergine-black, candle cream, ember orange | Libre Caslon Text + Libre Franklin | Single-column "printed menu card" editorial with full-bleed chapter breaks | **Set the table**: tapping dishes places SVG plates on a top-down table that feeds the reservation | Candlelit, intimate, sensual | Planned |
+| 2 | `keel-and-kerf` | Residential renovation (design-build kitchens, baths, additions) | Bone paper, blueprint navy, safety yellow | Archivo (Expanded/Black) + Azeret Mono | Technical-drawing grid: annotated dimension lines, spec-sheet tables, sticky side panel | **Ballpark builder**: room/size/finish estimator whose price range animates along a tape-measure ruler | Precise, straight-talking, dependable | Planned |
+| 3 | `cruxwell` | Bouldering gym (day passes, intro sessions, memberships) | Chalk white + multi-colour "hold" pop (orange, blue, green, pink) on black ink | Sofia Sans Extra Condensed + Atkinson Hyperlegible | Anti-grid sticker collage: tilted cards, oversized marquee type, overlapping blocks | **The Wall**: an SVG wall of holds; tap a colour circuit to light up that route and filter this week's problems | Loud, playful, communal | Planned |
+| 4 | `paperkite-vet` | Independent veterinary clinic (general practice + urgent same-day) | Pastel mint, deep pine, apricot, sky | Young Serif + Alegreya Sans | Soft rounded bento dashboard: "today at the clinic" tiles, one-question-at-a-time flows | **Is this urgent?**: a calm step-by-step triage helper that routes to call / same-day / routine booking while a paper kite climbs its string | Gentle, reassuring, kind | Planned |
+| 5 | `ninebark` | Boutique countryside inn (8 rooms, direct booking) | Earth neutrals: fog stone, charcoal moss, bark rust, lichen | Newsreader + Schibsted Grotesk | Horizontal-scroll cinematic panels (vertical scroll drives a sideways journey), vertical stack on mobile | **Season dial**: a rotary dial that re-colours an SVG landscape and swaps rates, room notes and itineraries for each season | Slow, hushed, restorative | Planned |
 
 Axis check (all five differ on every axis): palettes are dark-warm / bone+navy+yellow / chalk+multicolour /
 pastel mint+apricot / earthy neutrals; no font family is reused anywhere; layouts are single column /
@@ -52,6 +52,15 @@ horizontal-scroll + season system is the most complex and leans hardest on owner
 - **Inspiration notes:** (patterns, not copies — with gallery links)
 - **Research sources:**
 -->
+
+## Avoid the "generated" look (applies to every concept)
+
+- No pill buttons or pill badges. Radii stay small (0–4px; Paperkite, the softest brand, tops out at 12px on tiles).
+- No floating rounded navbars, soft blurred drop shadows, or status-dot badges ("● Open now").
+- No uppercase, wide-tracked eyebrow labels above every heading; use them only where the print reference calls for it (menu folios, spec sheets).
+- No accent-coloured last word in a headline, and no "→" on buttons.
+- One primary button per view; the secondary action is a plain text link.
+- Fonts avoided as overused: Inter, Manrope, Figtree, Instrument Serif, Bricolage Grotesque, Cormorant, Hanken Grotesk, Space Grotesk.
 
 ## Design direction research (shared notes)
 
@@ -105,7 +114,7 @@ Sources: [Lovable — website design trends 2026](https://lovable.dev/guides/web
   that still feels like someone's kitchen."
 - **Palette:** bg `#1d1418` (aubergine-black) · fg `#f3e7d7` (candle cream) · accent `#ef7a43` (ember)
   · support `#b9a7c9` (dusk lilac). All ≥ 6.4:1 on bg.
-- **Type:** display Instrument Serif (incl. italic for dish names) / text Hanken Grotesk.
+- **Type:** display Libre Caslon Text (incl. italic for dish names) / text Libre Franklin.
 - **Layout archetype:** Single centred column styled like a printed menu card (hairline rules,
   numbered courses, folio-style page markers), broken by full-bleed "chapter" bands for the room,
   the wine and the reservation. Mobile is native to this format.
@@ -143,7 +152,7 @@ Sources: [Lovable — website design trends 2026](https://lovable.dev/guides/web
 - **Palette:** bg `#f3f0e8` (bone paper) · fg `#14233b` (blueprint navy) · accent `#ffc61a` (safety
   yellow; used as fill behind navy text, never as text on bone) · support `#2d5694` (drafting blue).
 - **Type:** display Archivo (Expanded / Black via the width axis) / text Archivo regular; mono
-  IBM Plex Mono for dimensions, specs and labels. (Archivo counts as one family.)
+  Azeret Mono for dimensions, specs and labels. (Archivo counts as one family.)
 - **Layout archetype:** Technical-drawing grid: visible 12-col hairline grid, dimension lines and
   callout leaders annotating headings, spec-sheet tables, project "sheets" numbered like a drawing set
   (A-101…), and a sticky side panel holding the estimator on desktop.
@@ -180,7 +189,7 @@ Sources: [Lovable — website design trends 2026](https://lovable.dev/guides/web
 - **Brand personality:** Loud, playful, encouraging, chalky. "Fall off, laugh, go again."
 - **Palette:** bg `#f5f4ee` (chalk) · fg `#121212` (ink) · accents as hold colours, always with ink text
   on them: `#ff5a1f` orange · `#2350e6` blue (white text) · `#1fc77e` green · `#ff4fa3` pink.
-- **Type:** display Bricolage Grotesque (heavy, tight, condensed optical size) / text Atkinson
+- **Type:** display Sofia Sans Extra Condensed (heavy, tight, condensed optical size) / text Atkinson
   Hyperlegible.
 - **Layout archetype:** Anti-grid sticker collage: tilted cards, overlapping blocks, tape and chalk
   marks, oversized marquee type between sections, anchored by a strict baseline grid so it still reads.
@@ -215,7 +224,7 @@ Sources: [Lovable — website design trends 2026](https://lovable.dev/guides/web
 - **Brand personality:** Gentle, reassuring, competent, a little whimsical. "Calm hands, clear answers."
 - **Palette:** bg `#eef5f0` (mint mist) · fg `#1e3b34` (deep pine) · accent `#ff9466` (apricot, pine
   text on it) · support `#cfe3f4` (sky). Links `#2f6b5c`.
-- **Type:** display Young Serif / text Figtree.
+- **Type:** display Young Serif / text Alegreya Sans.
 - **Layout archetype:** Soft rounded bento dashboard: "today at Paperkite" tiles (open now, next free
   slot, emergency line, parking), service tiles, team tiles; flows are one question per screen.
 - **Signature interaction:** **Is this urgent?** A calm, step-by-step helper (species → what's
@@ -252,7 +261,7 @@ Sources: [Lovable — website design trends 2026](https://lovable.dev/guides/web
   itinerary."
 - **Palette:** bg `#dedad0` (fog stone) · fg `#26281f` (charcoal moss) · accent `#8a4426` (bark rust,
   5.1:1) · support `#5f6b3a` (lichen; large text and decoration only, 4.1:1).
-- **Type:** display Cormorant Garamond (light, large, generous tracking for small caps) / text Manrope.
+- **Type:** display Newsreader (light, large, generous tracking for small caps) / text Schibsted Grotesk.
 - **Layout archetype:** Horizontal-scroll cinematic panels: vertical scroll drives a sideways journey
   through the house (arrival → rooms → table → trails), with field-journal captions; stacks
   vertically on mobile and under reduced motion. Readable text stays out of the moving track.
