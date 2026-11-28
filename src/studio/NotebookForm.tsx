@@ -32,16 +32,48 @@ const EMPTY: ConsultationInput = {
   contact_method: 'Email',
 }
 
-type Field = 'name' | 'email' | 'project_type' | 'message'
+type Field = 'name' | 'email' | 'phone' | 'project_type' | 'message'
 type Errors = Partial<Record<Field, string>>
+const FIELD_ORDER: Field[] = ['name', 'email', 'phone', 'project_type', 'message']
 
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+/** name@domain.tld: no spaces, one @, a dotted domain ending in a 2+ letter TLD, no ".." anywhere. */
+const EMAIL_RE = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/
+
+function emailError(raw: string): string | undefined {
+  const v = raw.trim()
+  if (!v) return 'We need an email to reply to.'
+  if (!v.includes('@')) return 'An email needs an @, like name@example.com.'
+  if (!EMAIL_RE.test(v)) return 'That email doesn’t look right. Check for typos, like name@example.com.'
+}
+
+/** Digits only, dropping a leading US country code, capped at 10. */
+const phoneDigits = (raw: string) => {
+  let d = raw.replace(/\D/g, '')
+  if (d.length === 11 && d.startsWith('1')) d = d.slice(1)
+  return d.slice(0, 10)
+}
+
+/** Formats as the visitor types: 555 → 555-1 → 555-123-4567. */
+function formatPhone(raw: string): string {
+  const d = phoneDigits(raw)
+  if (d.length <= 3) return d
+  if (d.length <= 6) return `${d.slice(0, 3)}-${d.slice(3)}`
+  return `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`
+}
+
+/** Optional, but if given it must be a full US/Canada number (area code and exchange can't start with 0 or 1). */
+function phoneError(raw: string): string | undefined {
+  const d = raw.replace(/\D/g, '')
+  if (!d) return
+  if (d.length !== 10) return 'Use all 10 digits, like 617-555-0123.'
+  if (!/^[2-9]\d{2}[2-9]\d{6}$/.test(d)) return 'That doesn’t look like a valid US number. Check for typos.'
+}
 
 function validate(f: ConsultationInput): Errors {
   const e: Errors = {}
   if (!f.name.trim()) e.name = 'What should we call you?'
-  if (!f.email.trim()) e.email = 'We need an email to reply to.'
-  else if (!EMAIL_RE.test(f.email.trim())) e.email = 'That email doesn’t look quite right.'
+  e.email = emailError(f.email)
+  e.phone = phoneError(f.phone ?? '')
   if (!f.project_type) e.project_type = 'Pick the closest one.'
   if (!f.message.trim()) e.message = 'A sentence or two is plenty.'
   return e
@@ -109,6 +141,17 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
     if (k in errors) setErrors((x) => ({ ...x, [k]: undefined }))
   }
 
+  // Email and phone are checked as soon as the visitor leaves the field, not only on submit.
+  const checkOnBlur = (k: 'email' | 'phone') => () => {
+    const msg = k === 'email' ? (form.email.trim() ? emailError(form.email) : undefined) : phoneError(form.phone ?? '')
+    setErrors((x) => ({ ...x, [k]: msg }))
+  }
+
+  const onPhone = (e: { target: { value: string } }) => {
+    setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))
+    if (errors.phone) setErrors((x) => ({ ...x, phone: undefined }))
+  }
+
   const err = (k: Field) =>
     errors[k] ? (
       <span className="nb-err" id={`nb-err-${k}`}>
@@ -126,7 +169,7 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
     }
     const found = validate(form)
     setErrors(found)
-    const first = (['name', 'email', 'project_type', 'message'] as Field[]).find((k) => found[k])
+    const first = FIELD_ORDER.find((k) => found[k])
     if (first) {
       const el = page.current?.querySelector<HTMLElement>(`[name="${first}"]`)
       el?.focus({ preventScroll: true })
@@ -140,6 +183,7 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
           ...form,
           name: form.name.trim(),
           email: form.email.trim(),
+          phone: form.phone ? formatPhone(form.phone) : '',
           message: form.message.trim(),
           budget: form.budget || NOT_SURE,
           timeline: form.timeline || NOT_SURE,
@@ -203,12 +247,13 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
             <div className="nb-row">
               <label className="nb-field">
                 <span>Reach me at</span>
-                <input name="email" required type="email" inputMode="email" maxLength={200} autoComplete="email" enterKeyHint="next" placeholder="email" value={form.email} onChange={set('email')} {...invalid('email')} />
+                <input name="email" required type="email" inputMode="email" maxLength={200} autoComplete="email" enterKeyHint="next" placeholder="email" value={form.email} onChange={set('email')} onBlur={checkOnBlur('email')} {...invalid('email')} />
                 {err('email')}
               </label>
               <label className="nb-field">
                 <span>or</span>
-                <input type="tel" inputMode="tel" maxLength={40} autoComplete="tel" enterKeyHint="next" placeholder="phone (optional)" value={form.phone} onChange={set('phone')} />
+                <input name="phone" type="tel" inputMode="tel" maxLength={14} autoComplete="tel-national" enterKeyHint="next" placeholder="xxx-xxx-xxxx (optional)" value={form.phone} onChange={onPhone} onBlur={checkOnBlur('phone')} {...invalid('phone')} />
+                {err('phone')}
               </label>
             </div>
 

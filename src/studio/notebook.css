@@ -225,12 +225,16 @@
 .nb-field {
   flex-wrap: wrap;
 }
+/* Beats `.nb-field > span` (the grey label colour), which also matched these. */
+.nb-field > .nb-err,
 .nb-err {
   flex-basis: 100%;
   margin-top: 2px;
-  font-size: 19px;
+  font-size: 20px;
+  font-weight: 600;
   line-height: 1.2;
-  color: #b3261e;
+  white-space: normal;
+  color: #d0281b;
 }
 .nb-field [aria-invalid='true'] {
   border-bottom-color: #b3261e;
