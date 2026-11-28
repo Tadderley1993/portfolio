@@ -65,7 +65,7 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
   }
 
   return (
-    <main className="exterior" aria-label="d> Studio exterior">
+    <main className="exterior" aria-label="Designs By Terrence Adderley exterior">
       <Stage name="exterior" rect={rect} small={vp.device === 'mobile'} ref={camera}>
         <div className="vignette" />
       </Stage>
@@ -88,15 +88,12 @@ export function Exterior({ vp, active, onEnter }: ExteriorProps) {
           </h1>
           {stacked && (
             <p className="exterior-intro">
-              An independent design &amp; development studio. Step inside to explore our work, or book a call from
+              An independent design &amp; development studio. Step inside to explore our work, or book a consultation from
               the desk.
             </p>
           )}
           <button className="btn-pill" onClick={enter} disabled={leaving}>
-            Enter The Studio
-            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.6" aria-hidden="true">
-              <path d="M3 8h10M9 4l4 4-4 4" />
-            </svg>
+            Enter the studio
           </button>
           {stacked && (
             <ul className="exterior-services" aria-label="Services">

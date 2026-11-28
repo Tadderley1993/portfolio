@@ -9,6 +9,7 @@ import {
   submitConsultation,
   type ConsultationInput,
 } from '../lib/consultations'
+import { useBackLayer } from '../lib/backLayer'
 import './notebook.css'
 
 interface NotebookFormProps {
@@ -31,12 +32,63 @@ const EMPTY: ConsultationInput = {
   contact_method: 'Email',
 }
 
+type Field = 'name' | 'email' | 'phone' | 'project_type' | 'message'
+type Errors = Partial<Record<Field, string>>
+const FIELD_ORDER: Field[] = ['name', 'email', 'phone', 'project_type', 'message']
+
+/** name@domain.tld: no spaces, one @, a dotted domain ending in a 2+ letter TLD, no ".." anywhere. */
+const EMAIL_RE = /^[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+(\.[A-Za-z0-9!#$%&'*+/=?^_`{|}~-]+)*@[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]*[A-Za-z0-9])?)*\.[A-Za-z]{2,}$/
+
+function emailError(raw: string): string | undefined {
+  const v = raw.trim()
+  if (!v) return 'We need an email to reply to.'
+  if (!v.includes('@')) return 'An email needs an @, like name@example.com.'
+  if (!EMAIL_RE.test(v)) return 'That email doesn’t look right. Check for typos, like name@example.com.'
+}
+
+/** Digits only, dropping a leading US country code, capped at 10. */
+const phoneDigits = (raw: string) => {
+  let d = raw.replace(/\D/g, '')
+  if (d.length === 11 && d.startsWith('1')) d = d.slice(1)
+  return d.slice(0, 10)
+}
+
+/** Formats as the visitor types: 555 → 555-1 → 555-123-4567. */
+function formatPhone(raw: string): string {
+  const d = phoneDigits(raw)
+  if (d.length <= 3) return d
+  if (d.length <= 6) return `${d.slice(0, 3)}-${d.slice(3)}`
+  return `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`
+}
+
+/** Optional, but if given it must be a full US/Canada number (area code and exchange can't start with 0 or 1). */
+function phoneError(raw: string): string | undefined {
+  const d = raw.replace(/\D/g, '')
+  if (!d) return
+  if (d.length !== 10) return 'Use all 10 digits, like 617-555-0123.'
+  if (!/^[2-9]\d{2}[2-9]\d{6}$/.test(d)) return 'That doesn’t look like a valid US number. Check for typos.'
+}
+
+function validate(f: ConsultationInput): Errors {
+  const e: Errors = {}
+  if (!f.name.trim()) e.name = 'What should we call you?'
+  e.email = emailError(f.email)
+  e.phone = phoneError(f.phone ?? '')
+  if (!f.project_type) e.project_type = 'Pick the closest one.'
+  if (!f.message.trim()) e.message = 'A sentence or two is plenty.'
+  return e
+}
+
+/** Budget and timeline are optional; an empty choice is stored as "Not sure yet". */
+const NOT_SURE = 'Not sure yet'
+
 type State = { kind: 'idle' } | { kind: 'sending' } | { kind: 'sent' } | { kind: 'error'; message: string }
 
 export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormProps) {
   const [form, setForm] = useState(EMPTY)
   const [state, setState] = useState<State>({ kind: 'idle' })
   const [honeypot, setHoneypot] = useState('')
+  const [errors, setErrors] = useState<Errors>({})
   const page = useRef<HTMLDivElement>(null)
   const backdrop = useRef<HTMLDivElement>(null)
   const closing = useRef(false)
@@ -56,7 +108,8 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
       )
     }
     gsap.fromTo(backdrop.current, { opacity: 0 }, { opacity: 1, duration: 0.4 })
-    el.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true })
+    // Desktop only: on phones the keyboard would cover half the sheet before the visitor has read it.
+    if (!sheet) el.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -73,6 +126,9 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
     )
   }
 
+  // Back gesture / browser Back closes the notebook.
+  useBackLayer(true, close)
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === 'Escape' && close()
     window.addEventListener('keydown', onKey)
@@ -80,8 +136,30 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const set = (k: keyof ConsultationInput) => (e: { target: { value: string } }) =>
+  const set = (k: keyof ConsultationInput) => (e: { target: { value: string } }) => {
     setForm((f) => ({ ...f, [k]: e.target.value }))
+    if (k in errors) setErrors((x) => ({ ...x, [k]: undefined }))
+  }
+
+  // Email and phone are checked as soon as the visitor leaves the field, not only on submit.
+  const checkOnBlur = (k: 'email' | 'phone') => () => {
+    const msg = k === 'email' ? (form.email.trim() ? emailError(form.email) : undefined) : phoneError(form.phone ?? '')
+    setErrors((x) => ({ ...x, [k]: msg }))
+  }
+
+  const onPhone = (e: { target: { value: string } }) => {
+    setForm((f) => ({ ...f, phone: formatPhone(e.target.value) }))
+    if (errors.phone) setErrors((x) => ({ ...x, phone: undefined }))
+  }
+
+  const err = (k: Field) =>
+    errors[k] ? (
+      <span className="nb-err" id={`nb-err-${k}`}>
+        {errors[k]}
+      </span>
+    ) : null
+  const invalid = (k: Field) =>
+    errors[k] ? { 'aria-invalid': true as const, 'aria-describedby': `nb-err-${k}` } : {}
 
   const submit = async (e: FormEvent) => {
     e.preventDefault()
@@ -89,10 +167,27 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
       setState({ kind: 'sent' })
       return
     }
+    const found = validate(form)
+    setErrors(found)
+    const first = FIELD_ORDER.find((k) => found[k])
+    if (first) {
+      const el = page.current?.querySelector<HTMLElement>(`[name="${first}"]`)
+      el?.focus({ preventScroll: true })
+      el?.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      return
+    }
     setState({ kind: 'sending' })
     try {
       await submitConsultation(
-        { ...form, name: form.name.trim(), email: form.email.trim(), message: form.message.trim() },
+        {
+          ...form,
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone ? formatPhone(form.phone) : '',
+          message: form.message.trim(),
+          budget: form.budget || NOT_SURE,
+          timeline: form.timeline || NOT_SURE,
+        },
         source,
       )
       setState({ kind: 'sent' })
@@ -127,62 +222,66 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
             <p className="nb-hand">
               We’ll read this properly and get back to you within one business day.
             </p>
-            <p className="nb-sign">— the d&gt; studio</p>
+            <p className="nb-sign">— Designs By Terrence Adderley</p>
             <button className="nb-submit" onClick={close}>
               Back to the desk
             </button>
           </div>
         ) : (
-          <form className="nb-form" onSubmit={submit} noValidate={false}>
+          <form className="nb-form" onSubmit={submit} noValidate>
             <p className="nb-date">{new Date().toLocaleDateString(undefined, { month: 'long', day: 'numeric' })}</p>
             <h2 id="nb-title" className="nb-title">Let’s plan your project</h2>
 
             <div className="nb-row">
               <label className="nb-field">
                 <span>My name is</span>
-                <input required maxLength={120} autoComplete="name" value={form.name} onChange={set('name')} />
+                <input name="name" required maxLength={120} autoComplete="name" enterKeyHint="next" value={form.name} onChange={set('name')} {...invalid('name')} />
+                {err('name')}
               </label>
               <label className="nb-field">
                 <span>from</span>
-                <input maxLength={160} autoComplete="organization" placeholder="company (optional)" value={form.company} onChange={set('company')} />
+                <input maxLength={160} autoComplete="organization" enterKeyHint="next" placeholder="company (optional)" value={form.company} onChange={set('company')} />
               </label>
             </div>
 
             <div className="nb-row">
               <label className="nb-field">
                 <span>Reach me at</span>
-                <input required type="email" maxLength={200} autoComplete="email" placeholder="email" value={form.email} onChange={set('email')} />
+                <input name="email" required type="email" inputMode="email" maxLength={200} autoComplete="email" enterKeyHint="next" placeholder="email" value={form.email} onChange={set('email')} onBlur={checkOnBlur('email')} {...invalid('email')} />
+                {err('email')}
               </label>
               <label className="nb-field">
                 <span>or</span>
-                <input type="tel" maxLength={40} autoComplete="tel" placeholder="phone (optional)" value={form.phone} onChange={set('phone')} />
+                <input name="phone" type="tel" inputMode="tel" maxLength={14} autoComplete="tel-national" enterKeyHint="next" placeholder="xxx-xxx-xxxx (optional)" value={form.phone} onChange={onPhone} onBlur={checkOnBlur('phone')} {...invalid('phone')} />
+                {err('phone')}
               </label>
             </div>
 
-            <fieldset className="nb-choices">
+            <fieldset className="nb-choices" {...invalid('project_type')}>
               <legend>I need help with</legend>
               {PROJECT_TYPES.map((t) => (
                 <label key={t} className="nb-chip">
-                  <input type="radio" name="project_type" value={t} required checked={form.project_type === t} onChange={set('project_type')} />
+                  <input type="radio" name="project_type" value={t} checked={form.project_type === t} onChange={set('project_type')} />
                   <span>{t}</span>
                 </label>
               ))}
+              {err('project_type')}
             </fieldset>
 
             <div className="nb-row">
               <label className="nb-field">
                 <span>Budget</span>
-                <select required value={form.budget} onChange={set('budget')}>
-                  <option value="" disabled>choose…</option>
-                  {BUDGETS.map((b) => (
+                <select value={form.budget} onChange={set('budget')}>
+                  <option value="">not sure yet</option>
+                  {BUDGETS.filter((b) => b !== NOT_SURE).map((b) => (
                     <option key={b}>{b}</option>
                   ))}
                 </select>
               </label>
               <label className="nb-field">
                 <span>Timeline</span>
-                <select required value={form.timeline} onChange={set('timeline')}>
-                  <option value="" disabled>choose…</option>
+                <select value={form.timeline} onChange={set('timeline')}>
+                  <option value="">not sure yet</option>
                   {TIMELINES.map((t) => (
                     <option key={t}>{t}</option>
                   ))}
@@ -192,7 +291,8 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
 
             <label className="nb-field nb-message">
               <span>Tell us about it</span>
-              <textarea required maxLength={4000} rows={4} value={form.message} onChange={set('message')} />
+              <textarea name="message" required maxLength={4000} rows={4} value={form.message} onChange={set('message')} {...invalid('message')} />
+              {err('message')}
             </label>
 
             <fieldset className="nb-choices nb-inline">
@@ -217,7 +317,7 @@ export function NotebookForm({ sheet, source, origin, onClose }: NotebookFormPro
             )}
 
             <button className="nb-submit" type="submit" disabled={state.kind === 'sending'}>
-              {state.kind === 'sending' ? 'Sending…' : 'Schedule my consultation →'}
+              {state.kind === 'sending' ? 'Sending…' : 'Book my consultation'}
             </button>
           </form>
         )}

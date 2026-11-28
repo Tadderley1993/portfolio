@@ -96,7 +96,7 @@
   letter-spacing: 0.01em;
   white-space: nowrap;
   padding: 6px 10px;
-  border-radius: 999px;
+  border-radius: 6px;
   color: var(--ink);
   background: var(--paper);
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
@@ -115,7 +115,7 @@
 .studio.is-touch .hs-text {
   opacity: 0.92;
   transform: none;
-  font-size: 11px;
+  font-size: 12px;
   padding: 5px 9px;
 }
 .hs-pulse {
@@ -175,9 +175,8 @@
 }
 .studio-hint {
   margin: auto auto 0;
-  font: 500 11px/1.4 var(--font-mono);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 1.4;
   text-align: center;
   color: var(--paper-dim);
   text-shadow: 0 1px 8px rgba(0, 0, 0, 0.8);
@@ -190,7 +189,7 @@
   grid-template-columns: 1fr 1.2fr 1fr;
   gap: 8px;
   padding: 8px;
-  border-radius: 20px;
+  border-radius: 14px;
   background: rgba(12, 13, 17, 0.6);
   border: 1px solid var(--line);
   backdrop-filter: blur(16px);
@@ -202,7 +201,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 6px;
-  border-radius: 14px;
+  border-radius: 10px;
   font-size: 12px;
   font-weight: 500;
   background: rgba(255, 255, 255, 0.06);
@@ -257,17 +256,15 @@
 }
 .desk-eyebrow {
   margin: 0;
-  font: 500 11px/1 var(--font-mono);
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  font-size: 14px;
+  font-weight: 600;
   color: var(--warm);
 }
 .desk-title {
   margin: 4px 0 0;
   font-family: var(--font-serif);
-  font-style: italic;
   font-weight: 400;
-  font-size: clamp(26px, 7.6vw, 34px);
+  font-size: clamp(30px, 8.4vw, 38px);
   line-height: 1.1;
 }
 .desk-sub {
@@ -287,7 +284,7 @@
   gap: 14px;
   width: 100%;
   padding: 14px 16px;
-  border-radius: 16px;
+  border-radius: 12px;
   text-align: left;
   background: rgba(12, 13, 17, 0.55);
   border: 1px solid var(--line);
@@ -335,5 +332,20 @@
   }
   .desk-cards button {
     padding: 10px 14px;
+  }
+}
+
+/* Phones: bigger touch targets for "Step outside" and the glowing markers. */
+@media (pointer: coarse) {
+  .studio-top .btn-ghost {
+    min-height: 44px;
+  }
+  .hs-pulse {
+    position: relative;
+  }
+  .hs-pulse::after {
+    content: '';
+    position: absolute;
+    inset: -15px;
   }
 }

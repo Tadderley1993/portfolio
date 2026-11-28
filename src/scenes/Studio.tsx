@@ -8,6 +8,7 @@ import { useExperience } from '../store'
 import { Desktop } from '../os/Desktop'
 import { PhoneOS } from '../os/PhoneOS'
 import { NotebookForm } from '../studio/NotebookForm'
+import { useBackLayer } from '../lib/backLayer'
 import './studio.css'
 
 interface StudioProps {
@@ -85,7 +86,7 @@ export function Studio({ vp, onExit }: StudioProps) {
   /** Zoom back out to the desk. `then` runs once the camera has fully settled (instead of focus → desk). */
   const closeMonitor = useCallback((then?: () => void) => {
     if (focus !== 'monitor') return
-    // Let a request from inside the computer (e.g. "Book a Call") interrupt an unfinished zoom-in.
+    // Let a request from inside the computer (e.g. "Book a Consultation") interrupt an unfinished zoom-in.
     if (busy.current && !then) return
     gsap.killTweensOf([camera.current, full.current, preview.current, ui.current])
     busy.current = true
@@ -112,6 +113,17 @@ export function Studio({ vp, onExit }: StudioProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [focus, rect, vp.w, vp.h])
 
+  /** Put the camera back at the desk with no animation (used behind the notebook sheet on phones). */
+  const resetMonitorInstantly = useCallback(() => {
+    gsap.killTweensOf([camera.current, full.current, preview.current, ui.current])
+    gsap.set(camera.current, { x: 0, y: 0, scale: 1, filter: 'blur(0px) brightness(1)' })
+    gsap.set(full.current, { autoAlpha: 0, display: 'none' })
+    gsap.set(preview.current, { autoAlpha: 1 })
+    gsap.set(ui.current, { autoAlpha: 1 })
+    busy.current = false
+    setDesktopMounted(false)
+  }, [])
+
   const openNotebook = useCallback(
     (fromMonitor = false) => {
       const go = () => {
@@ -119,12 +131,20 @@ export function Studio({ vp, onExit }: StudioProps) {
         setNotebookOrigin({ x: rect.left + cx * rect.scale, y: rect.top + cy * rect.scale })
         setFocus('notebook')
       }
-      // From inside the computer: zoom out first, then open the notebook once the camera is back.
-      if (fromMonitor) closeMonitor(go)
-      else if (focus === 'desk') go()
+      if (fromMonitor && mobile) {
+        // Phones: slide the sheet straight up over the computer, then quietly reset the desk behind it.
+        go()
+        window.setTimeout(resetMonitorInstantly, 550)
+      } else if (fromMonitor) {
+        // Desktop: zoom out first, then open the notebook once the camera is back.
+        closeMonitor(go)
+      } else if (focus === 'desk') go()
     },
-    [rect, focus, setFocus, closeMonitor],
+    [rect, focus, setFocus, closeMonitor, mobile, resetMonitorInstantly],
   )
+
+  // Back gesture / browser Back leaves the computer instead of leaving the studio.
+  useBackLayer(focus === 'monitor', () => closeMonitor(() => setFocus('desk')))
 
   // Esc leaves the computer
   useEffect(() => {
@@ -289,7 +309,7 @@ export function Studio({ vp, onExit }: StudioProps) {
               <button onClick={() => openNotebook()} className="is-primary">
                 <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6Z" /><path d="M9 8h6M9 12h6M9 16h3" /></svg>
                 <span className="dc-text">
-                  <span className="dc-title">Book a call</span>
+                  <span className="dc-title">Book a consultation</span>
                   <span className="dc-sub">Tell us about your project in the notebook</span>
                 </span>
               </button>
@@ -312,7 +332,7 @@ export function Studio({ vp, onExit }: StudioProps) {
             </button>
             <button onClick={() => openNotebook()} className="is-primary">
               <svg viewBox="0 0 24 24"><path d="M6 3h12v18H6Z" /><path d="M9 8h6M9 12h6M9 16h3" /></svg>
-              Book a call
+              Book a consultation
             </button>
             <button onClick={toggleLamp} aria-pressed={lampOn}>
               <svg viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3Z" /></svg>

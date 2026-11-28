@@ -81,7 +81,7 @@ export function Intro({ compact, reducedMotion, onDone }: IntroProps) {
       <p className={`intro-caption ${landed ? 'is-landed' : ''}`}>
         {landed ? 'Design & Development Studio' : icon.label}
       </p>
-      <span className="sr-only">Loading d&gt; Studio</span>
+      <span className="sr-only">Loading Designs By Terrence Adderley</span>
       <button className="intro-skip" onClick={finish}>
         Skip
       </button>

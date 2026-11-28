@@ -25,10 +25,8 @@
   color: #213049;
   border-radius: 4px 10px 10px 4px;
   background-color: #fbf7ee;
-  background-image:
-    linear-gradient(to right, transparent calc(var(--margin) - 1px), rgba(226, 92, 92, 0.55) calc(var(--margin) - 1px), rgba(226, 92, 92, 0.55) var(--margin), transparent var(--margin)),
-    repeating-linear-gradient(to bottom, transparent 0, transparent calc(var(--line-h) - 1px), rgba(98, 140, 196, 0.32) calc(var(--line-h) - 1px), rgba(98, 140, 196, 0.32) var(--line-h));
-  background-position: 0 0, 0 12px;
+  /* Plain paper with just the red margin line; no horizontal rules to line text up against. */
+  background-image: linear-gradient(to right, transparent calc(var(--margin) - 1px), rgba(226, 92, 92, 0.55) calc(var(--margin) - 1px), rgba(226, 92, 92, 0.55) var(--margin), transparent var(--margin));
   background-attachment: local;
   box-shadow:
     0 40px 90px rgba(0, 0, 0, 0.55),
@@ -61,9 +59,9 @@
   position: sticky;
   top: 0;
   float: right;
-  margin: -12px -20px 0 0;
-  width: 34px;
-  height: 34px;
+  margin: -14px -22px 0 0;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -71,8 +69,10 @@
   background: rgba(33, 48, 73, 0.06);
   z-index: 1;
 }
-.nb-close:hover {
-  background: rgba(33, 48, 73, 0.12);
+@media (hover: hover) {
+  .nb-close:hover {
+    background: rgba(33, 48, 73, 0.12);
+  }
 }
 .nb-close svg {
   width: 12px;
@@ -98,6 +98,8 @@
 }
 
 .nb-form {
+  /* Start below the floated close button so it doesn't narrow every row beside it. */
+  clear: both;
   display: flex;
   flex-direction: column;
 }
@@ -157,9 +159,16 @@
 }
 .nb-message textarea {
   resize: vertical;
-  border-bottom: 0;
+  margin-top: 4px;
+  padding: 4px 8px;
   min-height: calc(var(--line-h) * 4);
+  border: 1.5px dashed rgba(33, 48, 73, 0.22);
+  border-radius: 6px;
   background: transparent;
+}
+.nb-message textarea:focus {
+  border-color: #1d3fa0;
+  border-style: solid;
 }
 
 .nb-choices {
@@ -168,7 +177,7 @@
   padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 4px 6px;
+  gap: 8px 6px;
 }
 .nb-choices legend {
   font-size: 22px;
@@ -181,17 +190,21 @@
   pointer-events: none;
 }
 .nb-chip span {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-size: 21px;
   line-height: 1;
-  padding: 6px 12px 7px;
-  border-radius: 999px 999px 999px 999px / 70% 90% 80% 100%;
+  padding: 0 14px 1px;
+  border-radius: 22px 26px 22px 24px / 20px 24px 22px 24px;
   border: 1.5px solid rgba(33, 48, 73, 0.25);
   cursor: pointer;
   transition: all 150ms;
 }
-.nb-chip:hover span {
-  border-color: #1d3fa0;
+@media (hover: hover) {
+  .nb-chip:hover span {
+    border-color: #1d3fa0;
+  }
 }
 .nb-chip input:checked + span {
   color: #1d3fa0;
@@ -209,6 +222,26 @@
   left: -9999px;
 }
 
+.nb-field {
+  flex-wrap: wrap;
+}
+/* Beats `.nb-field > span` (the grey label colour), which also matched these. */
+.nb-field > .nb-err,
+.nb-err {
+  flex-basis: 100%;
+  margin-top: 2px;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.2;
+  white-space: normal;
+  color: #d0281b;
+}
+.nb-field [aria-invalid='true'] {
+  border-bottom-color: #b3261e;
+}
+.nb-message textarea[aria-invalid='true'] {
+  border-color: #b3261e;
+}
 .nb-error {
   font-size: 21px;
   color: #b3261e;
@@ -226,11 +259,14 @@
   background: #172238;
   border-radius: 6px 14px 8px 12px;
   transform: rotate(-1deg);
+  white-space: nowrap;
   transition: transform 200ms var(--ease-out), background 200ms;
 }
-.nb-submit:hover:not(:disabled) {
-  transform: rotate(0.5deg) translateY(-2px);
-  background: #1d3fa0;
+@media (hover: hover) {
+  .nb-submit:hover:not(:disabled) {
+    transform: rotate(0.5deg) translateY(-2px);
+    background: #1d3fa0;
+  }
 }
 .nb-submit:disabled {
   opacity: 0.6;
@@ -265,6 +301,9 @@
   transform: none;
   padding: 22px 18px calc(28px + env(safe-area-inset-bottom)) calc(var(--margin) + 12px);
 }
+.nb-layer.is-sheet .nb-close {
+  margin-right: -8px;
+}
 .nb-layer.is-sheet .nb-spiral {
   left: 4px;
 }
@@ -278,6 +317,11 @@
   }
   .nb-title {
     font-size: 32px;
+  }
+  .nb-submit {
+    align-self: stretch;
+    padding-inline: 14px;
+    font-size: 23px;
   }
   .nb-field input,
   .nb-field select,

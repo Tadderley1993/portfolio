@@ -59,7 +59,7 @@
   align-items: center;
   gap: 8px;
   padding: 4px 6px 4px 12px;
-  border-radius: 999px;
+  border-radius: 8px;
   font-size: 12px;
   background: rgba(255, 255, 255, 0.08);
 }
@@ -357,7 +357,7 @@
   font-size: 13px;
 }
 .finder-meta {
-  font-size: 11px;
+  font-size: 12px;
   color: var(--paper-faint);
   margin-top: -6px;
 }
@@ -418,24 +418,23 @@
   padding: 64px 68px;
   background: #fffdf9;
   color: #1d1f24;
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 16px;
   line-height: 1.65;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
 }
 .docv-page h1 {
-  font-size: 38px;
+  font-family: var(--font-serif);
+  font-size: 40px;
   line-height: 1.1;
   margin: 0 0 6px;
-  font-weight: 600;
+  font-weight: 400;
   letter-spacing: -0.01em;
 }
 .docv-sub {
   margin: 0 0 32px;
   font-family: var(--font-sans);
-  font-size: 12px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 14px;
   color: #8a6b43;
 }
 .docv-page h2 {
@@ -446,11 +445,10 @@
 }
 .docv-page blockquote {
   margin: 0 0 28px;
-  padding-left: 18px;
-  border-left: 3px solid #ffb45c;
-  font-size: 22px;
-  font-style: italic;
-  line-height: 1.4;
+  padding: 0;
+  font-family: var(--font-serif);
+  font-size: 26px;
+  line-height: 1.3;
 }
 
 /* ───────────────────────── browser ───────────────────────── */
@@ -475,6 +473,7 @@
 .browser-nav button {
   width: 28px;
   height: 28px;
+  position: relative;
   display: grid;
   place-items: center;
   border-radius: 7px;
@@ -539,7 +538,7 @@
 }
 .startpage-kicker {
   margin: 0;
-  font: 500 11px/1 var(--font-mono);
+  font: 500 12px/1 var(--font-mono);
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--paper-faint);
@@ -727,6 +726,7 @@
 }
 .term-form input {
   flex: 1;
+  min-width: 0;
   background: none;
   border: 0;
   outline: none;
@@ -793,6 +793,11 @@
   font-size: 15px;
   font-weight: 600;
 }
+.phone-back {
+  justify-self: start;
+  min-height: 44px;
+  padding-right: 12px;
+}
 .phone-brand svg {
   width: 22px;
 }
@@ -814,8 +819,8 @@
 }
 .phone-close {
   justify-self: end;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   border-radius: 50%;
@@ -830,6 +835,8 @@
   gap: 22px 10px;
   align-content: start;
   overflow: auto;
+  flex: 1;
+  min-height: 0;
 }
 .phone-icon {
   width: 100%;
@@ -874,4 +881,42 @@
 }
 .phone-app .mock-nav span:not(.mock-cta) {
   display: none;
+}
+/* Docked booking bar at the bottom of the phone computer */
+.phone-book {
+  flex: none;
+  padding: 10px 14px max(10px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(13, 16, 21, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+.phone-book button {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  border-radius: 14px;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 16px;
+  font-weight: 600;
+}
+.phone-book svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+}
+/* iOS zooms the page when an input under 16px gets focus. */
+.phone-app .term-form input {
+  font-size: 16px;
+}
+/* Phones: 44px touch targets for the browser's back / forward / home. */
+.phone-app .browser-nav button {
+  width: 44px;
+  height: 44px;
 }

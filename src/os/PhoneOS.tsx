@@ -5,11 +5,18 @@ import { OsContext } from './context'
 import { useWm, type AppSpec } from './wm'
 import { renderApp } from './Desktop'
 import { Logo } from '../components/Logo'
+import { useBackLayer } from '../lib/backLayer'
 import './os.css'
 
 interface PhoneOSProps {
   onBook: () => void
   onExit: () => void
+}
+
+/** One history entry per open app, so Back closes the app instead of leaving the studio. */
+function BackEntry({ onBack }: { onBack: () => void }) {
+  useBackLayer(true, onBack)
+  return null
 }
 
 /** Mobile take on the desktop: an app grid, and apps open full-screen with a back button. */
@@ -35,13 +42,14 @@ export function PhoneOS({ onBook, onExit }: PhoneOSProps) {
   }
 
   const top = stack[stack.length - 1]
+  const pop = () => setStack((s) => s.slice(0, -1))
 
   return (
     <OsContext.Provider value={{ openItem, onBook, onExit, compact: true, touch: true }}>
       <div className="phone-os">
         <header className="phone-bar">
           {top ? (
-            <button className="phone-back" onClick={() => setStack((s) => s.slice(0, -1))}>
+            <button className="phone-back" onClick={pop}>
               <svg viewBox="0 0 16 16"><path d="M10 3 5 8l5 5" /></svg>
               Back
             </button>
@@ -73,6 +81,18 @@ export function PhoneOS({ onBook, onExit }: PhoneOSProps) {
             })}
           </ul>
         )}
+
+        {/* Booking is always one tap away, in thumb reach. */}
+        <div className="phone-book">
+          <button onClick={onBook}>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h12v18H6Z" /><path d="M9 8h6M9 12h6M9 16h3" /></svg>
+            Book a consultation
+          </button>
+        </div>
+
+        {stack.map((_, i) => (
+          <BackEntry key={i} onBack={pop} />
+        ))}
       </div>
     </OsContext.Provider>
   )
